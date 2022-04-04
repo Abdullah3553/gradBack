@@ -5,9 +5,10 @@ import { AppService } from './app.service';
 export class AppController {
   constructor(private readonly appService: AppService) {}
 
-  @Get()
+  @Get('/all')
   getHello(): string {
-    
-    return this.appService.getHello();
+    const t1 = this.appService.getHello()
+    const t2 = this.appService.HolaAseel();
+    return t1+t2;
   }
 }
