@@ -8,7 +8,7 @@ export class AppController {
   @Get('/all')
   getHello(): string {
     const t1 = this.appService.getHello()
-    const t2 = this.appService.HolaAseel();
+    const t2 = this.appService.HolaAseel()
     return t1+t2;
   }
 }
