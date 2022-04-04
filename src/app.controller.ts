@@ -6,7 +6,6 @@ export class AppController {
   constructor(private readonly appService: AppService) {}
 
   @Get('/all')
-  @Get('/main')
   getHello(): string {
     const t1 = this.appService.getHello()
     const t2 = this.appService.HolaAseel();
