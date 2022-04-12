@@ -7,27 +7,27 @@ import { UpdateRoleDto } from './dto/update-role.dto';
 export class RoleController {
   constructor(private readonly roleService: RoleService) {}
 
-  @Post("/new_role")
+  @Post("/new")
   create(@Body() createRoleDto: CreateRoleDto) {
     return this.roleService.create(createRoleDto);
   }
 
-  @Get()
+  @Get("/find/all")
   findAll() {
     return this.roleService.findAll();
   }
 
-  @Get(':id')
+  @Get('/find/:id')
   findOne(@Param('id') id: string) {
     return this.roleService.findOne(+id);
   }
 
-  @Patch(':id')
+  @Patch('/update/:id')
   update(@Param('id') id: string, @Body() updateRoleDto: UpdateRoleDto) {
     return this.roleService.update(+id, updateRoleDto);
   }
 
-  @Delete(':id')
+  @Delete('/delete/:id')
   remove(@Param('id') id: string) {
     return this.roleService.remove(+id);
   }
