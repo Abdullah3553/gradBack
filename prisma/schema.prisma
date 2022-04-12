@@ -16,5 +16,10 @@ model authentication_method {
   file_path       String
 }
 
+model role {
+  id              Int      @default(autoincrement()) @id
+  name           String
+
+}
 
 
