@@ -56,10 +56,7 @@ export class AuthenticationMethodService {
         title: updateAuthenticationMethodDto.title,
         file_path: updateAuthenticationMethodDto.file_path,
       },
-      // create: {
-      //   id: request.id
-      //
-      // },
+
     })
     return update_authentication;
   }

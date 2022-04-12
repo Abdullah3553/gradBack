@@ -1,26 +1,52 @@
-import { Injectable } from '@nestjs/common';
+import {Injectable, NotAcceptableException} from '@nestjs/common';
 import { CreateRoleDto } from './dto/create-role.dto';
 import { UpdateRoleDto } from './dto/update-role.dto';
+import {PrismaService} from "../prisma.service";
 
 @Injectable()
 export class RoleService {
-  create(createRoleDto: CreateRoleDto) {
-    return 'This action adds a new role';
+  constructor(private prisma: PrismaService) {}
+
+  async create(createRoleDto: CreateRoleDto) {
+    const role = await this.prisma.role.create({
+      data: {
+        name: createRoleDto.name
+      },
+    })
+    return role;
   }
 
-  findAll() {
-    return `This action returns all role`;
+  async findAll() {
+    return await this.prisma.role.findMany();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} role`;
+  async findOne(id: number) {
+    const request = await this.prisma.role.findUnique({
+      where: {
+        id: id
+      },
+    })
+    return request;
   }
 
-  update(id: number, updateRoleDto: UpdateRoleDto) {
-    return `This action updates a #${id} role`;
+  async update(id: number, updateRoleDto: UpdateRoleDto) {
+      const updated_role = await this.prisma.role.update({
+        where:{
+          id:id
+        },
+        data:{
+          name:updateRoleDto.name,
+        }
+      });
+    return updated_role;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} role`;
+  async remove(id: number) {
+    const removed_role = await this.prisma.role.delete({
+      where:{
+        id:id
+      }
+    });
+    return removed_role;
   }
 }
