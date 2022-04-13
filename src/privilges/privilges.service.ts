@@ -7,8 +7,8 @@ import { UpdatePriviledgeDto } from './dto/update-priviledge.dto';
 export class PrivilegesService {
   constructor(private prisma: PrismaService) {}
 
-  create(createPriviledgeDto: CreatePriviledgeDto) {
-    return this.prisma.privileges.create({
+  async create(createPriviledgeDto: CreatePriviledgeDto) {
+    return await this.prisma.privileges.create({
       data: {
         name: createPriviledgeDto.name,
         read: createPriviledgeDto.read,
@@ -16,19 +16,37 @@ export class PrivilegesService {
       },
     });
   }
-  findAll() {
-    return `This action returns all priviledges`;
+  async findAll() {
+    return await this.prisma.privileges.findMany();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} priviledge`;
+  async findOne(id: number) {
+    const request = await this.prisma.privileges.findUnique({
+      where: {
+        id: id,
+      },
+    });
+    return request;
   }
 
-  update(id: number, updatePriviledgeDto: UpdatePriviledgeDto) {
-    return `This action updates a #${id} priviledge`;
+  async update(id: number, updatePriviledgeDto: UpdatePriviledgeDto) {
+    const updated_privilege = await this.prisma.privileges.update({
+      where: {
+        id: id,
+      },
+      data: {
+        name: updatePriviledgeDto.name,
+      },
+    });
+    return updated_privilege;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} priviledge`;
+  async remove(id: number) {
+    const removed_privileges = await this.prisma.privileges.delete({
+      where: {
+        id: id,
+      },
+    });
+    return removed_privileges;
   }
 }
