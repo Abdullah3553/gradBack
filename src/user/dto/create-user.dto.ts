@@ -6,7 +6,7 @@ export class CreateUserDto {
 
     @IsNotEmpty()
     @IsDate()
-    birth_Date:string
+    birth_date:string
 
     @IsNotEmpty()
     @IsEmail()

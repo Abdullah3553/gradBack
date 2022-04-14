@@ -7,23 +7,60 @@ import {PrismaService} from "../prisma.service";
 export class UserService {
   constructor(private readonly prisma : PrismaService) {
   }
-  create(createUserDto: CreateUserDto) {
-    return 'This action adds a new user';
+  async create(request: CreateUserDto) {
+    const user = await this.prisma.user.create({
+      data:{
+        username:request.username,
+        email:request.email,
+        birth_Date:request.birth_date,
+        country:request.country,
+        city:request.city,
+        street:request.street
+      }
+    });
+    return user;
   }
 
-  findAll() {
-    return `This action returns all user`;
+  async findAll() {
+    const users = await this.prisma.user.findMany();
+    return users;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} user`;
+  async findOne(id: number) {
+    const user = await this.prisma.user.findUnique({
+      where:{
+        id:id
+      }
+    });
+
+    return user;
   }
 
-  update(id: number, updateUserDto: UpdateUserDto) {
-    return `This action updates a #${id} user`;
+  async update(id: number, request: UpdateUserDto) {
+    const user = await this.prisma.user.update({
+      where:{
+        id:id
+      },
+      data:{
+        username:request.username,
+        email:request.email,
+        birth_Date:request.birth_date,
+        country:request.country,
+        city:request.city,
+        street:request.street
+      }
+    });
+
+    return user;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} user`;
+  async remove(id: number) {
+    const user = await this.prisma.user.delete({
+      where:{
+        id:id
+      }
+    });
+
+    return user ;
   }
 }
