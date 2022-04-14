@@ -36,6 +36,8 @@ export class PrivilegesService {
       },
       data: {
         name: updatePriviledgeDto.name,
+        read: updatePriviledgeDto.read,
+        write: updatePriviledgeDto.write,
       },
     });
     return updated_privilege;
