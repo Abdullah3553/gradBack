@@ -1,7 +1,7 @@
-import {Injectable, NotAcceptableException} from '@nestjs/common';
+import { Injectable, NotAcceptableException } from '@nestjs/common';
 import { CreateRoleDto } from './dto/create-role.dto';
 import { UpdateRoleDto } from './dto/update-role.dto';
-import {PrismaService} from "../prisma.service";
+import { PrismaService } from '../prisma.service';
 
 @Injectable()
 export class RoleService {
@@ -10,9 +10,9 @@ export class RoleService {
   async create(createRoleDto: CreateRoleDto) {
     const role = await this.prisma.role.create({
       data: {
-        name: createRoleDto.name
+        name: createRoleDto.name,
       },
-    })
+    });
     return role;
   }
 
@@ -23,29 +23,29 @@ export class RoleService {
   async findOne(id: number) {
     const request = await this.prisma.role.findUnique({
       where: {
-        id: id
+        id: id,
       },
-    })
+    });
     return request;
   }
 
   async update(id: number, updateRoleDto: UpdateRoleDto) {
-      const updated_role = await this.prisma.role.update({
-        where:{
-          id:id
-        },
-        data:{
-          name:updateRoleDto.name,
-        }
-      });
+    const updated_role = await this.prisma.role.update({
+      where: {
+        id: id,
+      },
+      data: {
+        name: updateRoleDto.name,
+      },
+    });
     return updated_role;
   }
 
   async remove(id: number) {
     const removed_role = await this.prisma.role.delete({
-      where:{
-        id:id
-      }
+      where: {
+        id: id,
+      },
     });
     return removed_role;
   }
