@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import {PrismaService} from "../prisma.service";
+import * as moment from 'moment' ;
 
 @Injectable()
 export class UserService {
@@ -12,7 +13,7 @@ export class UserService {
       data:{
         username:request.username,
         email:request.email,
-        birth_Date:request.birth_date,
+        birth_date:moment(request.birth_date).toDate(),
         country:request.country,
         city:request.city,
         street:request.street
@@ -44,7 +45,7 @@ export class UserService {
       data:{
         username:request.username,
         email:request.email,
-        birth_Date:request.birth_date,
+        birth_date:moment(request.birth_date).toDate(),
         country:request.country,
         city:request.city,
         street:request.street

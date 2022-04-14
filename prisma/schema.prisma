@@ -39,7 +39,7 @@ model authenticator {
 model user {
   id    Int     @id @default(autoincrement())
   username String @unique
-  birth_Date DateTime
+  birth_date DateTime
   email String @unique
   country    String ?
   street     String ?
