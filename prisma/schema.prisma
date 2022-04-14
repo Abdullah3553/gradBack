@@ -35,3 +35,14 @@ model authenticator {
   priority     Int
   access_token String
 }
+
+model user {
+  id    Int     @id @default(autoincrement())
+  username String @unique
+  birth_Date DateTime
+  email String @unique
+  country    String ?
+  street     String ?
+  city       String ?
+}
+
