@@ -11,22 +11,27 @@ datasource db {
 }
 
 model authentication_method {
-  id              Int      @default(autoincrement()) @id
-  title           String   @unique
-  file_path       String
+  id        Int    @id @default(autoincrement())
+  title     String @unique
+  file_path String
 }
 
 model role {
-  id              Int      @default(autoincrement()) @id
-  name           String
+  id   Int    @id @default(autoincrement())
+  name String
 
 }
 
 model privileges {
-  id Int @id @default(autoincrement())
-  name String  @db.VarChar(255)
-  read Boolean  @default(false)
-  write Boolean  @default(false)
+  id    Int     @id @default(autoincrement())
+  name  String  @db.VarChar(255)
+  read  Boolean @default(false)
+  write Boolean @default(false)
 }
 
-
+model authenticator {
+  id           Int    @id @default(autoincrement())
+  signature    String
+  priority     Int
+  access_token String
+}
