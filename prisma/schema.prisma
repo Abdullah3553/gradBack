@@ -10,33 +10,33 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model authentication_method {
+model Authentication_method {
   id        Int    @id @default(autoincrement())
   title     String @unique
   file_path String
 }
 
-model role {
+model Role {
   id   Int    @id @default(autoincrement())
   name String
 
 }
 
-model privileges {
+model Privileges {
   id    Int     @id @default(autoincrement())
   name  String  @db.VarChar(255)
   read  Boolean @default(false)
   write Boolean @default(false)
 }
 
-model authenticator {
+model Authenticator {
   id           Int    @id @default(autoincrement())
   signature    String
   priority     Int
   access_token String
 }
 
-model user {
+model User {
   id    Int     @id @default(autoincrement())
   username String @unique
   birth_date DateTime
