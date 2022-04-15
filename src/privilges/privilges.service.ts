@@ -8,7 +8,7 @@ export class PrivilegesService {
   constructor(private prisma: PrismaService) {}
 
   async create(createPriviledgeDto: CreatePriviledgeDto) {
-    return await this.prisma.privileges.create({
+    return await this.prisma.privilege.create({
       data: {
         name: createPriviledgeDto.name,
         read: createPriviledgeDto.read,
@@ -17,11 +17,11 @@ export class PrivilegesService {
     });
   }
   async findAll() {
-    return await this.prisma.privileges.findMany();
+    return await this.prisma.privilege.findMany();
   }
 
   async findOne(id: number) {
-    const request = await this.prisma.privileges.findUnique({
+    const request = await this.prisma.privilege.findUnique({
       where: {
         id: id,
       },
@@ -30,7 +30,7 @@ export class PrivilegesService {
   }
 
   async update(id: number, updatePriviledgeDto: UpdatePriviledgeDto) {
-    const updated_privilege = await this.prisma.privileges.update({
+    const updated_privilege = await this.prisma.privilege.update({
       where: {
         id: id,
       },
@@ -44,7 +44,7 @@ export class PrivilegesService {
   }
 
   async remove(id: number) {
-    const removed_privileges = await this.prisma.privileges.delete({
+    const removed_privileges = await this.prisma.privilege.delete({
       where: {
         id: id,
       },
