@@ -1,26 +1,55 @@
 import { Injectable } from '@nestjs/common';
 import { CreateAuthenticatorDto } from './dto/create-authenticator.dto';
 import { UpdateAuthenticatorDto } from './dto/update-authenticator.dto';
+import { PrismaService } from '../prisma.service';
 
 @Injectable()
 export class AuthenticatorService {
-  create(createAuthenticatorDto: CreateAuthenticatorDto) {
-    return 'This action adds a new authenticator';
+  constructor(private prisma: PrismaService) {}
+
+  async create(createAuthenticatorDto: CreateAuthenticatorDto) {
+    const user = await this.prisma.authenticator.create({
+      data: {
+        signature: createAuthenticatorDto.signature,
+        priority: createAuthenticatorDto.priority,
+        access_token: createAuthenticatorDto.access_token,
+      },
+    });
+
+    return user;
   }
 
-  findAll() {
-    return `This action returns all authenticator`;
+  async findAll() {
+    return await this.prisma.authenticator.findMany();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} authenticator`;
+  async findOne(id: number) {
+    return await this.prisma.authenticator.findUnique({
+      where: {
+        id: id,
+      },
+    });
   }
 
-  update(id: number, updateAuthenticatorDto: UpdateAuthenticatorDto) {
-    return `This action updates a #${id} authenticator`;
+  async update(id: number, updateAuthenticatorDto: UpdateAuthenticatorDto) {
+    const updateUser = await this.prisma.authenticator.update({
+      where: {
+        id: id,
+      },
+      data: {
+        signature: updateAuthenticatorDto.signature,
+        priority: updateAuthenticatorDto.priority,
+        access_token: updateAuthenticatorDto.access_token,
+      },
+    });
+    return updateUser;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} authenticator`;
+  async remove(id: number) {
+    return await this.prisma.authenticator.delete({
+      where: {
+        id: id,
+      },
+    });
   }
 }

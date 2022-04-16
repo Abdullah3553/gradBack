@@ -16,8 +16,8 @@ export class AuthenticatorController {
   constructor(private readonly authenticatorService: AuthenticatorService) {}
 
   @Post('/create')
-  create(@Body() createAuthenticatorDto: CreateAuthenticatorDto) {
-    return this.authenticatorService.create(createAuthenticatorDto);
+  create(@Body() request_body: CreateAuthenticatorDto) {
+    return this.authenticatorService.create(request_body);
   }
 
   @Get('/find/all')
@@ -27,7 +27,7 @@ export class AuthenticatorController {
 
   @Get('/find/:id')
   findOne(@Param('id') id: string) {
-    return this.authenticatorService.findOne(+id);
+    return this.authenticatorService.findOne(Number(id));
   }
 
   @Patch('/update/:id')
@@ -35,11 +35,11 @@ export class AuthenticatorController {
     @Param('id') id: string,
     @Body() updateAuthenticatorDto: UpdateAuthenticatorDto,
   ) {
-    return this.authenticatorService.update(+id, updateAuthenticatorDto);
+    return this.authenticatorService.update(Number(id), updateAuthenticatorDto);
   }
 
   @Delete('/delete/:id')
   remove(@Param('id') id: string) {
-    return this.authenticatorService.remove(+id);
+    return this.authenticatorService.remove(Number(id));
   }
 }
