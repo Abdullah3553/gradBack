@@ -3,7 +3,7 @@ import {
   NotAcceptableException,
   NotFoundException,
 } from '@nestjs/common';
-import { PrismaService } from '../prisma.service';
+import { PrismaService } from '../prisma/prisma.service';
 import { CreateAuthenticationMethodDto } from './dto/create-authentication_method.dto';
 import { UpdateAuthenticationMethodDto } from './dto/update-authentication_method.dto';
 
