@@ -1,11 +1,8 @@
-import {
-  Injectable,
-  NotAcceptableException,
-  NotFoundException,
-} from '@nestjs/common';
-import { PrismaService } from '../prisma.service';
+import {Injectable, NotAcceptableException, NotFoundException} from '@nestjs/common';
+import { PrismaService } from "../prisma.service";
 import { CreateAuthenticationMethodDto } from './dto/create-authentication_method.dto';
 import { UpdateAuthenticationMethodDto } from './dto/update-authentication_method.dto';
+
 
 @Injectable()
 export class AuthenticationMethodService {
@@ -13,16 +10,16 @@ export class AuthenticationMethodService {
 
   async create(request: CreateAuthenticationMethodDto) {
     // check for existence
-    const checker = await this.findOne(request);
-    if (checker.id) {
-      throw new NotAcceptableException('This method exists already');
+    const chekcer = await this.findOne(request);
+    if(chekcer.id){
+      throw new NotAcceptableException("This method exists already")
     }
     const response = await this.prisma.authentication_method.create({
       data: {
         title: request.title,
         file_path: request.file_path,
       },
-    });
+    })
     return response;
   }
 
@@ -30,47 +27,55 @@ export class AuthenticationMethodService {
     return await this.prisma.authentication_method.findMany();
   }
 
-  async findOne(id: CreateAuthenticationMethodDto) {
+  async findOne (id: CreateAuthenticationMethodDto) {
     const request = await this.prisma.authentication_method.findUnique({
       where: {
         id: id.id,
       },
-    });
+    })
     return request;
   }
 
-  async update(
-    id: number,
-    updateAuthenticationMethodDto: UpdateAuthenticationMethodDto,
-  ) {
-    const checker = await this.prisma.authentication_method.findUnique({
+  async findOneByTitle (title: CreateAuthenticationMethodDto) {
+    const request = await this.prisma.authentication_method.findUnique({
       where: {
-        title: updateAuthenticationMethodDto.title,
+       title : title.title ,
       },
-    });
-    if (checker.id && checker.id != id) {
-      throw new NotAcceptableException('Repeated Authentication method');
+    })
+    return request;
+  }
+
+  async update(id: number, updateAuthenticationMethodDto: UpdateAuthenticationMethodDto) {
+
+    const checker = await this.prisma.authentication_method.findUnique({
+      where:{
+        title:updateAuthenticationMethodDto.title
+      }
+    })
+    if(checker.id && checker.id!=id){
+      throw new NotAcceptableException("Repeated Authentication method")
     }
 
-    const update_authentication =
-      await this.prisma.authentication_method.update({
-        where: {
-          id: id,
-        },
-        data: {
-          title: updateAuthenticationMethodDto.title,
-          file_path: updateAuthenticationMethodDto.file_path,
-        },
-      });
+    const update_authentication = await this.prisma.authentication_method.update({
+      where: {
+        id: id,
+
+      },
+      data: {
+        title: updateAuthenticationMethodDto.title,
+        file_path: updateAuthenticationMethodDto.file_path,
+      },
+
+    })
     return update_authentication;
   }
 
   async remove(id: CreateAuthenticationMethodDto) {
     const delete_Auth = await this.prisma.authentication_method.delete({
       where: {
-        id: id.id,
+        id :id.id ,
       },
-    });
+    })
     return delete_Auth;
   }
 }

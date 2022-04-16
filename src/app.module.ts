@@ -4,9 +4,10 @@ import { AppService } from './app.service';
 import { AuthenticationMethodModule } from './authentication_method/authentication_method.module';
 import { RoleModule } from './role/role.module';
 import { AuthenticatorModule } from './authenticator/authenticator.module';
+import { UserModule } from './user/user.module';
 
 @Module({
-  imports: [AuthenticationMethodModule, RoleModule, AuthenticatorModule],
+  imports: [AuthenticationMethodModule, RoleModule, AuthenticatorModule, UserModule],
   controllers: [AppController],
   providers: [AppService],
 })
