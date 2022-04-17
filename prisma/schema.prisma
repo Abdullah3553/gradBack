@@ -14,7 +14,7 @@ model Authentication_method {
   id            Int             @id @default(autoincrement())
   title         String          @unique
   file_path     String
-  Authenticator Authenticator[]
+  authenticators Authenticator[]
 }
 
 model Role {
@@ -31,12 +31,12 @@ model Privilege {
 }
 
 model Authenticator {
-  id                      Int                   @id @default(autoincrement())
-  signature               String
-  priority                Int
-  access_token            String
-  auth_method             Authentication_method @relation(references: [id], fields: [authentication_methodId])
-  authentication_methodId Int
+  id                        Int                   @id @default(autoincrement())
+  signature                 String
+  priority                  Int
+  access_token              String
+  authentication_method     Authentication_method @relation(references: [id], fields: [authentication_methodId])
+  authentication_method_id  Int
 }
 
 model User {
