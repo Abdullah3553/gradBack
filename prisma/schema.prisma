@@ -35,7 +35,7 @@ model Authenticator {
   signature                 String
   priority                  Int
   access_token              String
-  authentication_method     Authentication_method @relation(references: [id], fields: [authentication_methodId])
+  authentication_method     Authentication_method @relation(references: [id], fields: [authentication_method_id])
   authentication_method_id  Int
 }
 
