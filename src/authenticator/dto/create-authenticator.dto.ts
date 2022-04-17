@@ -11,4 +11,8 @@ export class CreateAuthenticatorDto {
   @IsString()
   @IsNotEmpty()
   access_token: string;
+  @IsInt()
+  @IsNotEmpty()
+  @IsPositive()
+  userId: number;
 }

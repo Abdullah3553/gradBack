@@ -25,6 +25,10 @@ export class AuthenticatorController {
     return this.authenticatorService.findAll();
   }
 
+  @Get('/find/user/:id')
+  findByuserId(@Param('id') id: string) {
+    return this.authenticatorService.findByuserId(Number(id));
+  }
   @Get('/find/:id')
   findOne(@Param('id') id: string) {
     return this.authenticatorService.findOne(Number(id));

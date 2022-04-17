@@ -11,10 +11,10 @@ datasource db {
 }
 
 model Authentication_method {
-  id            Int             @id @default(autoincrement())
-  title         String          @unique
-  file_path     String
-  Authenticator Authenticator[]
+  id        Int    @id @default(autoincrement())
+  title     String @unique
+  file_path String
+
 }
 
 model Role {
@@ -31,20 +31,21 @@ model Privilege {
 }
 
 model Authenticator {
-  id                      Int                   @id @default(autoincrement())
-  signature               String
-  priority                Int
-  access_token            String
-  auth_method             Authentication_method @relation(references: [id], fields: [authentication_methodId])
-  authentication_methodId Int
+  id           Int    @id @default(autoincrement())
+  signature    String
+  priority     Int
+  access_token String
+  user         User   @relation(references: [id], fields: [userId])
+  userId       Int
 }
 
 model User {
-  id         Int      @id @default(autoincrement())
-  username   String   @unique
-  birth_date DateTime
-  email      String   @unique
-  country    String?
-  street     String?
-  city       String?
+  id            Int             @id @default(autoincrement())
+  username      String          @unique
+  birth_date    DateTime
+  email         String          @unique
+  country       String?
+  street        String?
+  city          String?
+  Authenticator Authenticator[]
 }
