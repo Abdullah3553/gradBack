@@ -13,7 +13,7 @@ export class AuthenticationMethodService {
 
   async create(request: CreateAuthenticationMethodDto) {
     // check for existence
-    const chekcer = await this.findOne(request);
+    const chekcer = await this.findOne(request.id);
     if (chekcer.id) {
       throw new NotAcceptableException('This method exists already');
     }
@@ -30,10 +30,10 @@ export class AuthenticationMethodService {
     return await this.prisma.authentication_method.findMany();
   }
 
-  async findOne(id: CreateAuthenticationMethodDto) {
+  async findOne(id:number) {
     const request = await this.prisma.authentication_method.findUnique({
       where: {
-        id: id.id,
+        id:Number(id),
       },
     });
     return request;
@@ -74,10 +74,10 @@ export class AuthenticationMethodService {
     return update_authentication;
   }
 
-  async remove(id: CreateAuthenticationMethodDto) {
+  async remove(id: number) {
     const delete_Auth = await this.prisma.authentication_method.delete({
       where: {
-        id: id.id,
+        id: Number(id),
       },
     });
     return delete_Auth;
