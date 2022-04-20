@@ -5,9 +5,10 @@ import { AuthenticationMethodModule } from '../authentication_method/authenticat
 import { RoleModule } from '../role/role.module';
 import { AuthenticatorModule } from '../authenticator/authenticator.module';
 import { UserModule } from '../user/user.module';
+import {PrivilegesModule} from "../privileges/privileges.module";
 
 @Module({
-  imports: [AuthenticationMethodModule, RoleModule, AuthenticatorModule, UserModule], // @TODO @Omniaashraf123
+  imports: [AuthenticationMethodModule, RoleModule, AuthenticatorModule, UserModule ,PrivilegesModule], // @TODO @Omniaashraf123
   controllers: [AppController],
   providers: [AppService],
 })

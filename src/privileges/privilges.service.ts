@@ -8,11 +8,17 @@ export class PrivilegesService {
   constructor(private prisma: PrismaService) {}
 
   async create(createPriviledgeDto: CreatePriviledgeDto) {
+    const roles = createPriviledgeDto.roles?.map(( role) => ({
+      id:role,
+    }));
     return await this.prisma.privilege.create({
       data: {
         name: createPriviledgeDto.name,
         read: createPriviledgeDto.read,
         write: createPriviledgeDto.write,
+        roles: {
+          connect: roles,
+        },
       },
     });
   }
