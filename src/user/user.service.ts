@@ -16,14 +16,41 @@ export class UserService {
         birth_date:moment(request.birth_date).toDate(),
         country:request.country,
         city:request.city,
-        street:request.street
-      }
+        street:request.street,
+        role:{
+          connect:{
+            id:request.role_id
+          }
+        }
+      },
+      select:{
+        id: true,
+        username: true,
+        birth_date: true,
+        email: true,
+        country: true,
+        street: true,
+        city: true,
+        role:true
+      },
     });
     return user;
   }
 
   async findAll() {
-    const users = await this.prisma.user.findMany();
+    const users = await this.prisma.user.findMany({
+      select:{
+        id: true,
+        username: true,
+        birth_date: true,
+        email: true,
+        country: true,
+        street: true,
+        city: true,
+        role:true
+      },
+
+    });
     return users;
   }
 
@@ -31,7 +58,17 @@ export class UserService {
     const user = await this.prisma.user.findUnique({
       where:{
         id:id
-      }
+      },
+      select:{
+        id: true,
+        username: true,
+        birth_date: true,
+        email: true,
+        country: true,
+        street: true,
+        city: true,
+        role:true
+      },
     });
 
     return user;
@@ -49,7 +86,17 @@ export class UserService {
         country:request.country,
         city:request.city,
         street:request.street
-      }
+      },
+      select:{
+        id: true,
+        username: true,
+        birth_date: true,
+        email: true,
+        country: true,
+        street: true,
+        city: true,
+        role:true
+      },
     });
 
     return user;
@@ -59,7 +106,17 @@ export class UserService {
     const user = await this.prisma.user.delete({
       where:{
         id:id
-      }
+      },
+      select:{
+        id: true,
+        username: true,
+        birth_date: true,
+        email: true,
+        country: true,
+        street: true,
+        city: true,
+        role:true
+      },
     });
 
     return user ;
