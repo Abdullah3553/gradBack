@@ -7,7 +7,7 @@ import { AuthenticatorModule } from '../authenticator/authenticator.module';
 import { UserModule } from '../user/user.module';
 
 @Module({
-  imports: [AuthenticationMethodModule, RoleModule, AuthenticatorModule, UserModule],
+  imports: [AuthenticationMethodModule, RoleModule, AuthenticatorModule, UserModule], // @TODO Omnia
   controllers: [AppController],
   providers: [AppService],
 })
