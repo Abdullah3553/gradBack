@@ -18,17 +18,17 @@ export class AuthenticationMethodController {
   }
 
   @Get('/find/:id')
-  findOne(@Param('id') id: number) {
-    return this.authenticationMethodService.findOne(id);
+  findOne(@Param('id') id: string ) {
+    return this.authenticationMethodService.findOne(Number(id));
   }
 
   @Patch('/update/:id')
-  update(@Param('id') id: string,@Body() updateAuthenticationMethodDto: UpdateAuthenticationMethodDto) {
-    return this.authenticationMethodService.update( +id, updateAuthenticationMethodDto);
+  update(@Param('id') id: string, @Body() updateAuthenticationMethodDto: UpdateAuthenticationMethodDto) {
+    return this.authenticationMethodService.update( Number(id), updateAuthenticationMethodDto);
   }
 
   @Delete('/delete/:id')
-  remove(@Param('id') id: number) {
-    return this.authenticationMethodService.remove(id);
+  remove(@Param('id') id:string) {
+    return this.authenticationMethodService.remove(Number(id));
   }
 }

@@ -33,7 +33,7 @@ export class AuthenticationMethodService {
   async findOne(id:number) {
     const request = await this.prisma.authentication_method.findUnique({
       where: {
-        id:Number(id),
+        id:id,
       },
     });
     return request;
@@ -77,7 +77,7 @@ export class AuthenticationMethodService {
   async remove(id: number) {
     const delete_Auth = await this.prisma.authentication_method.delete({
       where: {
-        id: Number(id),
+        id: id,
       },
     });
     return delete_Auth;
