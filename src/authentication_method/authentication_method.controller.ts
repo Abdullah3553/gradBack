@@ -18,7 +18,7 @@ export class AuthenticationMethodController {
   }
 
   @Get('/find/:id')
-  findOne(@Param('id') id: CreateAuthenticationMethodDto) {
+  findOne(@Param('id') id: number) {
     return this.authenticationMethodService.findOne(id);
   }
 
@@ -28,7 +28,7 @@ export class AuthenticationMethodController {
   }
 
   @Delete('/delete/:id')
-  remove(@Param('id') id: CreateAuthenticationMethodDto) {
+  remove(@Param('id') id: number) {
     return this.authenticationMethodService.remove(id);
   }
 }
