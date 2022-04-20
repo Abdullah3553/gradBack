@@ -25,6 +25,11 @@ export class PrivilegesController {
     return this.priviledgesService.findAll();
   }
 
+  @Get('/find/role/:id')
+  findByRoleId(@Param('id') id: string) {
+    return this.priviledgesService.findAllByRoleId(Number(id));
+  }
+
   @Get('/find/:id')
   findOne(@Param('id') id: CreatePrivilegeDto) {
     return this.priviledgesService.findOne(+id);

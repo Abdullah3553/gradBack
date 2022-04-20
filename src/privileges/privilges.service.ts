@@ -45,6 +45,20 @@ export class PrivilegesService {
     return request;
   }
 
+  async findAllByRoleId(roleId:number){
+    const privileges = await this.prisma.privilege.findMany({
+      where:{
+        roles:{
+          some:{
+            id:roleId
+          }
+        }
+      }
+    })
+
+    return privileges
+  }
+
   async update(id: number, updatePrivilegeDto: UpdatePriviledgeDto) {
     const roles = updatePrivilegeDto.roles?.map(( role) => ({
       id:role,
