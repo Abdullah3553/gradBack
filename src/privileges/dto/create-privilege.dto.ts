@@ -1,4 +1,4 @@
-export class CreatePriviledgeDto {
+export class CreatePrivilegeDto {
   name: string;
   read: boolean;
   write: boolean;

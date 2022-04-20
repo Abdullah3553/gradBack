@@ -1,29 +1,36 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { CreatePriviledgeDto } from './dto/create-priviledge.dto';
+import { CreatePrivilegeDto } from './dto/create-privilege.dto';
 import { UpdatePriviledgeDto } from './dto/update-priviledge.dto';
 
 @Injectable()
 export class PrivilegesService {
   constructor(private prisma: PrismaService) {}
 
-  async create(createPriviledgeDto: CreatePriviledgeDto) {
-    const roles = createPriviledgeDto.roles?.map(( role) => ({
+  async create(createPrivilegeDto: CreatePrivilegeDto) {
+    const roles = createPrivilegeDto.roles?.map(( role) => ({
       id:role,
     }));
     return await this.prisma.privilege.create({
       data: {
-        name: createPriviledgeDto.name,
-        read: createPriviledgeDto.read,
-        write: createPriviledgeDto.write,
+        name: createPrivilegeDto.name,
+        read: createPrivilegeDto.read,
+        write: createPrivilegeDto.write,
         roles: {
           connect: roles,
         },
       },
+      include:{
+        roles:true
+      }
     });
   }
   async findAll() {
-    return await this.prisma.privilege.findMany();
+    return await this.prisma.privilege.findMany({
+      include:{
+        roles:true
+      }
+    });
   }
 
   async findOne(id: number) {
@@ -31,20 +38,46 @@ export class PrivilegesService {
       where: {
         id: id,
       },
+      include:{
+        roles:true
+      }
     });
     return request;
   }
 
-  async update(id: number, updatePriviledgeDto: UpdatePriviledgeDto) {
+  async findAllByRoleId(roleId:number){
+    const privileges = await this.prisma.privilege.findMany({
+      where:{
+        roles:{
+          some:{
+            id:roleId
+          }
+        }
+      }
+    })
+
+    return privileges
+  }
+
+  async update(id: number, updatePrivilegeDto: UpdatePriviledgeDto) {
+    const roles = updatePrivilegeDto.roles?.map(( role) => ({
+      id:role,
+    }));
     const updated_privilege = await this.prisma.privilege.update({
       where: {
         id: id,
       },
       data: {
-        name: updatePriviledgeDto.name,
-        read: updatePriviledgeDto.read,
-        write: updatePriviledgeDto.write,
+        name: updatePrivilegeDto.name,
+        read: updatePrivilegeDto.read,
+        write: updatePrivilegeDto.write,
+        roles:{
+          connect:roles
+        }
       },
+      include:{
+        roles:true
+      }
     });
     return updated_privilege;
   }
@@ -54,6 +87,9 @@ export class PrivilegesService {
       where: {
         id: id,
       },
+      include:{
+        roles:true
+      }
     });
     return removed_privileges;
   }
