@@ -31,14 +31,12 @@ export class AuthenticatorService {
     return await this.prisma.authenticator.findMany();
   }
 
-
-  async findByuserId(userId: number){
-
+  async findByuserId(userId: number) {
     return await this.prisma.authenticator.findMany({
       where: {
         userId: userId,
-      }
-    })
+      },
+    });
   }
   async findOne(id: number) {
     return await this.prisma.authenticator.findUnique({
