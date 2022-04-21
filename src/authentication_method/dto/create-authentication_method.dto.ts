@@ -9,4 +9,6 @@ export class CreateAuthenticationMethodDto {
   @IsOptional()
   @IsString()
   file_path?: string;
+  @IsNotEmpty()
+  authenticatorId: number;
 }

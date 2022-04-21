@@ -21,6 +21,11 @@ export class AuthenticationMethodService {
       data: {
         title: request.title,
         file_path: request.file_path,
+        authenticator: {
+          connect: {
+            id: CreateAuthenticationMethodDto.authenticatorId,
+          },
+        },
       },
     });
     return response;
@@ -30,10 +35,10 @@ export class AuthenticationMethodService {
     return await this.prisma.authentication_method.findMany();
   }
 
-  async findOne(id:number) {
+  async findOne(id: number) {
     const request = await this.prisma.authentication_method.findUnique({
       where: {
-        id:id,
+        id: id,
       },
     });
     return request;
