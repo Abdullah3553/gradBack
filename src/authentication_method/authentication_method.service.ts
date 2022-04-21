@@ -21,11 +21,6 @@ export class AuthenticationMethodService {
       data: {
         title: request.title,
         file_path: request.file_path,
-        authenticator: {
-          connect: {
-            id: request.authenticatorId,
-          },
-        },
       },
     });
     return response;

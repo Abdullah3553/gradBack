@@ -14,8 +14,7 @@ model Authentication_method {
   id        Int    @id @default(autoincrement())
   title     String @unique
   file_path String
-  authenticator Authenticator @relation(references:[id], fields:[authenticatorId])
-  authenticatorId Int
+  authenticator Authenticator[]
 
 }
 
@@ -41,7 +40,8 @@ model Authenticator {
   access_token String
   user         User   @relation(references: [id], fields: [userId])
   userId       Int
-  authentication_method Authentication_method[]
+  authentication_method Authentication_method @relation(references:[id], fields:[authentication_methodId])
+  authentication_methodId Int
 }
 
 model User {
