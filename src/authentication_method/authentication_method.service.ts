@@ -23,7 +23,7 @@ export class AuthenticationMethodService {
         file_path: request.file_path,
         authenticator: {
           connect: {
-            id: CreateAuthenticationMethodDto.authenticatorId,
+            id: request.authenticatorId,
           },
         },
       },
