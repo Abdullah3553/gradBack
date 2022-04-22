@@ -61,6 +61,8 @@ export class AuthenticatorService {
   }
 
   async remove(id: number) {
+
+    
     return await this.prisma.authenticator.delete({
       where: {
         id: id,
