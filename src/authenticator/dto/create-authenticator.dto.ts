@@ -15,5 +15,6 @@ export class CreateAuthenticatorDto {
   @IsNotEmpty()
   @IsPositive()
   userId: number;
-  
+  @IsNotEmpty()
+  authentication_methodId: number;
 }
