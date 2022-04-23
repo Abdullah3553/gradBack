@@ -13,7 +13,7 @@ export class AuthenticationMethodService {
 
   async create(request: CreateAuthenticationMethodDto) {
     // check for existence
-    const chekcer = await this.findOne(request.id);
+    const chekcer = await this.findOneByTitle(request);
     if (chekcer.id) {
       throw new NotAcceptableException('This method exists already');
     }
