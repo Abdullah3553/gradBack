@@ -21,12 +21,12 @@ export class AuthenticatorService {
             id: createAuthenticatorDto.userId,
           },
         },
-        authentication_method:{
-          connect:{
-            id: createAuthenticatorDto.authentication_methodId,
+        //authentication_method:{
+         // connect:{
+           // id: createAuthenticatorDto.authentication_methodId,
           },
-        },
-      },
+       // },
+     // },
     });
 
     return auth;
