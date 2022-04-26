@@ -7,24 +7,50 @@ const { hashToken } = require('../../utils/hashToken');
 @Injectable()
 export class TokenService {
   constructor(private prisma: PrismaService) {}
-  create(createTokenDto: CreateTokenDto) {
-    return 'This action adds a new token';
+  create(userId: number) {
+    const token = "token should be here"
+    const user = this.prisma.token.create({
+      data:{
+        userId:userId,
+        hashedToken: hashToken(token)
+      }
+    })
   }
 
-  findAll() {
-    return `This action returns all token`;
+  async findAll() {
+    const tokens = await this.prisma.token.findMany()
+    return tokens ;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} token`;
+  async findOne(id: number) {
+    const token = await this.prisma.token.findUnique({
+      where:{
+        id:id
+      }
+    })
+  return token;
   }
 
-  update(id: number, updateTokenDto: UpdateTokenDto) {
-    return `This action updates a #${id} token`;
+  async update(id: number, updateTokenDto: UpdateTokenDto) {
+    const token = await this.prisma.token.update({
+      where:{
+        id:id
+      },
+      data:{
+        hashedToken:updateTokenDto.hashedToken,
+        revoked:updateTokenDto.revoked
+      }
+    })
+    return token
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} token`;
+  async remove(id: number) {
+    const token = await this.prisma.token.delete({
+      where:{
+        id:id
+      }
+    })
+    return token
   }
 
 // used when we create a refresh token.
