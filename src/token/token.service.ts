@@ -18,7 +18,7 @@ export class TokenService {
   }
 
   create(userId: number) {
-    const token = "token should be here"
+    const token = this.generateAccessToken(userId)
     const user = this.prisma.token.create({
       data:{
         userId:userId,
@@ -94,7 +94,7 @@ async revokeTokens(userId) {
   private generateRefreshToken(user, jti) {
     return jwt.sign({
       userId: user.id,
-      jti
+      jti:jti
     }, process.env.JWT_REFRESH_SECRET, {
       expiresIn: '8h',
     });
