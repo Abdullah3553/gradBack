@@ -61,7 +61,7 @@ model User {
 }
 
 model Token {
-  id          Int   @id @unique @default(autoincrement())
+  id          String   @id @unique @default(uuid())
   hashedToken String
   userId      Int
   User        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
