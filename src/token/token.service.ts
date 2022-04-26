@@ -22,7 +22,7 @@ export class TokenService {
     return tokens ;
   }
 
-  async findOne(id: number) {
+  async findOne(id: string) {
     const token = await this.prisma.token.findUnique({
       where:{
         id:id
@@ -31,7 +31,7 @@ export class TokenService {
   return token;
   }
 
-  async update(id: number, updateTokenDto: UpdateTokenDto) {
+  async update(id: string, updateTokenDto: UpdateTokenDto) {
     const token = await this.prisma.token.update({
       where:{
         id:id
@@ -44,7 +44,7 @@ export class TokenService {
     return token
   }
 
-  async remove(id: number) {
+  async remove(id: string) {
     const token = await this.prisma.token.delete({
       where:{
         id:id
@@ -54,19 +54,19 @@ export class TokenService {
   }
 
 // used when we create a refresh token.
-async addRefreshTokenToWhitelist({ jti, refreshToken, userId }) {
-  return this.prisma.refreshToken.create({
+async addtokenToWhitelist({ jti, token, userId }) {
+  return this.prisma.token.create({
     data: {
       id: jti,
-      hashedToken: hashToken(refreshToken),
+      hashedToken: hashToken(token),
       userId
     },
   });
 }
 
 // used to check if the token sent by the client is in the database.
-async findRefreshTokenById(id) {
-  return this.prisma.refreshToken.findUnique({
+async findtokenById(id) {
+  return this.prisma.token.findUnique({
     where: {
       id,
     },
@@ -74,8 +74,8 @@ async findRefreshTokenById(id) {
 }
 
 // soft delete tokens after usage.
- async deleteRefreshToken(id) {
-  return this.prisma.refreshToken.update({
+ async deletetoken(id) {
+  return this.prisma.token.update({
     where: {
       id,
     },
@@ -86,7 +86,7 @@ async findRefreshTokenById(id) {
 }
 
 async revokeTokens(userId) {
-  return this.prisma.refreshToken.updateMany({
+  return this.prisma.token.updateMany({
     where: {
       userId
     },

@@ -19,16 +19,16 @@ export class TokenController {
 
   @Get('find/:id')
   findOne(@Param('id') id: string) {
-    return this.tokenService.findOne(Number(id));
+    return this.tokenService.findOne(id);
   }
 
   @Patch('update/:id')
   update(@Param('id') id: string, @Body() updateTokenDto: UpdateTokenDto) {
-    return this.tokenService.update(Number(id), updateTokenDto);
+    return this.tokenService.update(id, updateTokenDto);
   }
 
   @Delete('delete/:id')
   remove(@Param('id') id: string) {
-    return this.tokenService.remove(Number(id));
+    return this.tokenService.remove(id);
   }
 }
