@@ -54,46 +54,47 @@ export class TokenService {
   }
 
 // used when we create a refresh token.
-async addtokenToWhitelist({ jti, token, userId }) {
-  return this.prisma.token.create({
-    data: {
-      id: jti,
-      hashedToken: hashToken(token),
-      userId
-    },
-  });
+// async addtokenToWhitelist({ jti, token, userId }) {
+//   return this.prisma.token.create({
+//     data: {
+//       id: jti,
+//       hashedToken: hashToken(token),
+//       userId
+//     },
+//   });
+// }
+//
+// // used to check if the token sent by the client is in the database.
+// async findtokenById(id) {
+//   return this.prisma.token.findUnique({
+//     where: {
+//       id,
+//     },
+//   });
+// }
+//
+// // soft delete tokens after usage.
+//  async deletetoken(id) {
+//   return this.prisma.token.update({
+//     where: {
+//       id,
+//     },
+//     data: {
+//       revoked: true
+//     }
+//   });
+// }
+//
+// async revokeTokens(userId) {
+//   return this.prisma.token.updateMany({
+//     where: {
+//       userId
+//     },
+//     data: {
+//       revoked: true
+//     }
+//   });
+// }
 }
-
-// used to check if the token sent by the client is in the database.
-async findtokenById(id) {
-  return this.prisma.token.findUnique({
-    where: {
-      id,
-    },
-  });
-}
-
-// soft delete tokens after usage.
- async deletetoken(id) {
-  return this.prisma.token.update({
-    where: {
-      id,
-    },
-    data: {
-      revoked: true
-    }
-  });
-}
-
-async revokeTokens(userId) {
-  return this.prisma.token.updateMany({
-    where: {
-      userId
-    },
-    data: {
-      revoked: true
-    }
-  });
-} }
 
 
