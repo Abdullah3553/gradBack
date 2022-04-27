@@ -14,7 +14,7 @@ export class AuthenticationMethodService {
   async create(request: CreateAuthenticationMethodDto) {
     // check for existence
     const chekcer = await this.findOneByTitle(request);
-    if (chekcer.id) {
+      if (chekcer.id) {
       throw new NotAcceptableException('This method exists already');
     }
     const response = await this.prisma.authentication_method.create({

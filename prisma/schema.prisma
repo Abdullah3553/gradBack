@@ -55,4 +55,26 @@ model User {
   Authenticator Authenticator[]
   role          Role?           @relation(references: [id], fields: [role_id])
   role_id       Int ?
+  tokens        Token[]
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+}
+
+model Token {
+  id          String   @id @unique @default(uuid())
+  hashedToken String
+  userId      Int
+  User        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  revoked     Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Plan {
+    id                  Int         @id @default(autoincrement())
+    name                String      @db.VarChar(255)
+    description         String?     @db.Text
+    price               Int         @default(0)
+    duration_months     Int         @default(0)
+    activated           Boolean     @default(false)
 }
