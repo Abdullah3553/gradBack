@@ -69,3 +69,12 @@ model Token {
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 }
+
+model Plan {
+    id                  Int         @id @default(autoincrement())
+    name                String      @db.VarChar(255)
+    description         String?     @db.Text
+    price               Int         @default(0)
+    duration_months     Int         @default(0)
+    activated           Boolean     @default(false)
+}
