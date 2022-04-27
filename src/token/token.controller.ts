@@ -7,7 +7,7 @@ import { UpdateTokenDto } from './dto/update-token.dto';
 export class TokenController {
   constructor(private readonly tokenService: TokenService) {}
 
-  @Get('create/user/:id')
+  @Get('new/user/:id')
   create(@Param('id') id: string) {
     return this.tokenService.create(Number(id));
   }
