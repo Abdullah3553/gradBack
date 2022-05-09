@@ -24,15 +24,20 @@ export class TokenService {
     return crypto.createHash('sha256').update(token).digest('hex');
   }
 
-  async createAccessToken(userId: number) {
-    const token = this.generateAccessToken(userId)
-    const user = await this.prisma.token.create({
+  async createRefreshToken(userId: number) {
+    const generatedToken = await this.prisma.token.create({
       data:{
-        userId:userId,
+        userId:userId
+      }
+    })
+    const token = this.generateRefreshToken(userId, generatedToken.id)
+    const updatedToken = await this.prisma.token.update({
+      where:{id:generatedToken.id},
+      data:{
         hashedToken: this.hashToken(token)
       }
     })
-    return user;
+    return updatedToken;
   }
 
   async findAll() {
@@ -70,7 +75,7 @@ export class TokenService {
     })
     return token
   }
-  async deletetoken(id) {
+  async deleteToken(id) {
     return await this.prisma.token.update({
       where: {
         id,
@@ -99,30 +104,30 @@ export class TokenService {
       expiresIn: '5m',
     });
   }
-  private generateRefreshToken(user, jti) {
+  private generateRefreshToken(userId, jti) {
     return jwt.sign({
-      userId: user.id,
+      userId: userId,
       jti:jti
     }, process.env.JWT_REFRESH_SECRET, {
       expiresIn: '8h',
     });
   }
 
-  generateTokens(user, jti) {
-    const accessToken = this.generateAccessToken(user);
-    const refreshToken = this.generateRefreshToken(user, jti);
+  generateTokens(userId, jti) {
+    const accessToken = this.generateAccessToken(userId);
+    const refreshToken = this.generateRefreshToken(userId, jti);
 
     return {
       accessToken,
       refreshToken,
     };
   }
-  async createNewUser(user:RegisterDto){
+  async registerNewUser(user:RegisterDto){
     /*
     to register a user we need to do 3 things :
      1) Create and store a new user with the sent user data and the default role
      2) use the generated userId to create and store all sent authenticators
-     3) Generate thre access token and refresh token and send it as a response to that user (in other words login for that user)
+     3) Generate the access token and refresh token and send it as a response to that user (in other words login for that user)
     */
     const newUser = await this.userService.create(user)//step 1
     for(let i =0, arr=user.authenticators;i<arr.length;i++){
@@ -131,9 +136,13 @@ export class TokenService {
       authenticator = {...auth_method, userId:newUser.id}
       await this.authenticatorService.create(authenticator)//step 2
     }
-    const token = await this.createAccessToken(newUser.id)
-    const refreshToken = await this.cre
+    const refreshToken = await this.createRefreshToken(newUser.id)
+    const accessToken = this.generateAccessToken(newUser.id)
 
+    return{
+      refreshToken:refreshToken.hashedToken,
+      accessToken:accessToken
+    }
   }
 
 };
