@@ -2,10 +2,18 @@ import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/commo
 import { TokenService } from './token.service';
 import { CreateTokenDto } from './dto/create-token.dto';
 import { UpdateTokenDto } from './dto/update-token.dto';
+import {RegisterDto} from "./dto/register.dto";
+
 
 @Controller('token')
 export class TokenController {
   constructor(private readonly tokenService: TokenService) {}
+
+  @Post('/register')
+  register(@Body() req: RegisterDto)
+  {
+
+  }
 
   @Get('new/user/:id')
   create(@Param('id') id: string) {

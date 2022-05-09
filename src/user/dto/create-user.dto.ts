@@ -18,7 +18,5 @@ export class CreateUserDto {
 
     city?:string
 
-    @IsNotEmpty()
-    @IsInt()
-    role_id:number
+    role_id?:number
 }

@@ -3,11 +3,15 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import {PrismaService} from "../prisma/prisma.service";
 import * as moment from 'moment' ;
+import {TokenService} from "../token/token.service";
+
+
 
 @Injectable()
 export class UserService {
   constructor(private readonly prisma : PrismaService) {
   }
+  private tokenService: TokenService;
   async create(request: CreateUserDto) {
     const user = await this.prisma.user.create({
       data:{

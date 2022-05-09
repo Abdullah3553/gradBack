@@ -3,7 +3,9 @@ import { CreateTokenDto } from './dto/create-token.dto';
 import { UpdateTokenDto } from './dto/update-token.dto';
 import {PrismaService} from "../prisma/prisma.service";
 import crypto from "crypto";
-const { hashToken } = require('../../utils/hashToken');
+import {RegisterDto} from "./dto/register.dto";
+import {UserService} from "../user/user.service";
+import {CreateUserDto} from "../user/dto/create-user.dto";
 const jwt = require('jsonwebtoken');
 
 
@@ -11,7 +13,7 @@ const jwt = require('jsonwebtoken');
 @Injectable()
 export class TokenService {
 
-  constructor(private prisma: PrismaService) {}
+  constructor(private prisma: PrismaService,private userService: UserService) {}
 
   private hashToken(token) {
     return crypto.createHash('sha256').update(token).digest('hex');
@@ -22,7 +24,7 @@ export class TokenService {
     const user = this.prisma.token.create({
       data:{
         userId:userId,
-        hashedToken: hashToken(token)
+        hashedToken: this.hashToken(token)
       }
     })
   }
@@ -100,16 +102,20 @@ async revokeTokens(userId) {
     });
   }
 
-  private generateTokens(user, jti) {
-    const accessToken = this.generateAccessToken(user);
-    const refreshToken = this.generateRefreshToken(user, jti);
+    generateTokens(user, jti) {
+      const accessToken = this.generateAccessToken(user);
+      const refreshToken = this.generateRefreshToken(user, jti);
 
-    return {
-      accessToken,
-      refreshToken,
-    };
-  }
-}
+      return {
+        accessToken,
+        refreshToken,
+      };
+    }
+   async createNewUser(user:RegisterDto){
+    const newUser = await this.userService.create(user)
+    }
+
+};
 
 
 // used when we create a refresh token.
