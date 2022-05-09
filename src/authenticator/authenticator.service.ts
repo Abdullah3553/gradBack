@@ -22,11 +22,11 @@ export class AuthenticatorService {
           },
         },
         authentication_method:{
-         connect:{
-           id: createAuthenticatorDto.authentication_methodId,
+          connect:{
+            id: createAuthenticatorDto.authentication_methodId,
           },
         },
-     },
+      },
     });
 
     return auth;
@@ -67,7 +67,7 @@ export class AuthenticatorService {
 
   async remove(id: number) {
 
-    
+
     return await this.prisma.authenticator.delete({
       where: {
         id: id,

@@ -6,6 +6,8 @@ import crypto from "crypto";
 import {RegisterDto} from "./dto/register.dto";
 import {UserService} from "../user/user.service";
 import {CreateUserDto} from "../user/dto/create-user.dto";
+import { AuthenticatorService } from 'src/authenticator/authenticator.service';
+import { CreateAuthenticatorDto } from 'src/authenticator/dto/create-authenticator.dto';
 const jwt = require('jsonwebtoken');
 
 
@@ -13,20 +15,24 @@ const jwt = require('jsonwebtoken');
 @Injectable()
 export class TokenService {
 
-  constructor(private prisma: PrismaService,private userService: UserService) {}
+  constructor(private prisma: PrismaService,
+              private userService: UserService,
+              private authenticatorService: AuthenticatorService
+  ) {}
 
   private hashToken(token) {
     return crypto.createHash('sha256').update(token).digest('hex');
   }
 
-  create(userId: number) {
+  async createAccessToken(userId: number) {
     const token = this.generateAccessToken(userId)
-    const user = this.prisma.token.create({
+    const user = await this.prisma.token.create({
       data:{
         userId:userId,
         hashedToken: this.hashToken(token)
       }
     })
+    return user;
   }
 
   async findAll() {
@@ -40,7 +46,7 @@ export class TokenService {
         id:id
       }
     })
-  return token;
+    return token;
   }
 
   async update(id: string, updateTokenDto: UpdateTokenDto) {
@@ -65,26 +71,26 @@ export class TokenService {
     return token
   }
   async deletetoken(id) {
-  return await this.prisma.token.update({
-    where: {
-      id,
-    },
-    data: {
-      revoked: true
-    }
-  });
-}
+    return await this.prisma.token.update({
+      where: {
+        id,
+      },
+      data: {
+        revoked: true
+      }
+    });
+  }
 
-async revokeTokens(userId) {
-  return this.prisma.token.updateMany({
-    where: {
-      userId
-    },
-    data: {
-      revoked: true
-    }
-  });
-}
+  async revokeTokens(userId) {
+    return this.prisma.token.updateMany({
+      where: {
+        userId
+      },
+      data: {
+        revoked: true
+      }
+    });
+  }
 
 
 // Usually I keep the token between 5 minutes - 15 minutes
@@ -102,18 +108,33 @@ async revokeTokens(userId) {
     });
   }
 
-    generateTokens(user, jti) {
-      const accessToken = this.generateAccessToken(user);
-      const refreshToken = this.generateRefreshToken(user, jti);
+  generateTokens(user, jti) {
+    const accessToken = this.generateAccessToken(user);
+    const refreshToken = this.generateRefreshToken(user, jti);
 
-      return {
-        accessToken,
-        refreshToken,
-      };
+    return {
+      accessToken,
+      refreshToken,
+    };
+  }
+  async createNewUser(user:RegisterDto){
+    /*
+    to register a user we need to do 3 things :
+     1) Create and store a new user with the sent user data and the default role
+     2) use the generated userId to create and store all sent authenticators
+     3) Generate thre access token and refresh token and send it as a response to that user (in other words login for that user)
+    */
+    const newUser = await this.userService.create(user)//step 1
+    for(let i =0, arr=user.authenticators;i<arr.length;i++){
+      const auth_method = arr[i];
+      let authenticator = new CreateAuthenticatorDto()
+      authenticator = {...auth_method, userId:newUser.id}
+      await this.authenticatorService.create(authenticator)//step 2
     }
-   async createNewUser(user:RegisterDto){
-    const newUser = await this.userService.create(user)
-    }
+    const token = await this.createAccessToken(newUser.id)
+    const refreshToken = await this.cre
+
+  }
 
 };
 
