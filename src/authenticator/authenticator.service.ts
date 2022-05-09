@@ -2,9 +2,6 @@ import { Injectable } from '@nestjs/common';
 import { CreateAuthenticatorDto } from './dto/create-authenticator.dto';
 import { UpdateAuthenticatorDto } from './dto/update-authenticator.dto';
 import { PrismaService } from '../prisma/prisma.service';
-import { userInfo } from 'os';
-import { User } from '@prisma/client';
-import { identity } from 'rxjs';
 
 @Injectable()
 export class AuthenticatorService {
@@ -15,7 +12,6 @@ export class AuthenticatorService {
       data: {
         signature: createAuthenticatorDto.signature,
         priority: createAuthenticatorDto.priority,
-        access_token: createAuthenticatorDto.access_token,
         user: {
           connect: {
             id: createAuthenticatorDto.userId,
@@ -59,7 +55,6 @@ export class AuthenticatorService {
       data: {
         signature: updateAuthenticatorDto.signature,
         priority: updateAuthenticatorDto.priority,
-        access_token: updateAuthenticatorDto.access_token,
       },
     });
     return updateUser;
