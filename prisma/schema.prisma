@@ -52,7 +52,7 @@ model User {
   street        String?
   city          String?
   Authenticator Authenticator[]
-  role          Role?           @relation(references: [id], fields: [role_id])
+  role          Role?          @relation(references: [id], fields: [role_id])
   role_id       Int ?
   tokens        Token[]
   createdAt     DateTime       @default(now())

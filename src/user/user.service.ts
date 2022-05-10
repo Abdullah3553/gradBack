@@ -7,6 +7,7 @@ import {TokenService} from "../token/token.service";
 import {RegisterDto} from "./dto/register.dto";
 import {CreateAuthenticatorDto} from "../authenticator/dto/create-authenticator.dto";
 import {AuthenticatorService} from "../authenticator/authenticator.service";
+import { Prisma } from '@prisma/client'
 
 
 
@@ -42,7 +43,7 @@ export class UserService {
   }
 
   async create(request: CreateUserDto) {
-    const user = await this.prisma.user.create({
+    let user = await this.prisma.user.create({
       data:{
         username:request.username,
         email:request.email,
@@ -50,11 +51,7 @@ export class UserService {
         country:request.country,
         city:request.city,
         street:request.street,
-        role:{
-          connect:{
-            id:request.role_id
-          }
-        }
+        role_id:request.role_id?request.role_id:null
       },
       select:{
         id: true,
@@ -67,6 +64,29 @@ export class UserService {
         role:true
       },
     });
+    if(request.role_id){
+      const roledUser = await this.prisma.user.update({
+        where:{id:user.id},
+        data:{
+          role:{
+            connect:{
+              id:request.role_id
+            }
+          }
+        },
+        select:{
+          id: true,
+          username: true,
+          birth_date: true,
+          email: true,
+          country: true,
+          street: true,
+          city: true,
+          role:true
+        },
+      })
+      return roledUser
+    }
     return user;
   }
 
