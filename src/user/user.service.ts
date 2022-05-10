@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import {Injectable, NotFoundException} from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import {PrismaService} from "../prisma/prisma.service";
@@ -8,6 +8,7 @@ import {RegisterDto} from "./dto/register.dto";
 import {CreateAuthenticatorDto} from "../authenticator/dto/create-authenticator.dto";
 import {AuthenticatorService} from "../authenticator/authenticator.service";
 import { Prisma } from '@prisma/client'
+import {use} from "passport";
 
 
 
@@ -17,6 +18,31 @@ export class UserService {
               private tokenService: TokenService,
               private authenticatorService: AuthenticatorService
   ) {}
+
+  async getUserAuthenticationMethods(username:string){
+    const user = await this.prisma.user.findUnique({
+      where:{username},
+      include:{
+        Authenticator:{
+          include:{
+            authentication_method:true
+          }
+        },
+      }
+    })
+    if(!user){
+      throw new NotFoundException({message:"Wrong username"})
+    }
+    return {
+      username:user.username,
+      authentication_methods:user.Authenticator.map(obj=>{
+        return{
+          id:obj.authentication_method.id,
+          method:obj.authentication_method.title
+        }
+      })
+    }
+  }
 
 
   async registerNewUser(user:RegisterDto){

@@ -19,6 +19,11 @@ export class UserController {
     return this.userService.create(createUserDto);
   }
 
+  @Get('/find/authentication_methods/:username')
+  getAuthenticationMethods(@Param('username') username:string){
+    return this.userService.getUserAuthenticationMethods(username);
+  }
+
   @Get('/find/all')
   findAll() {
     return this.userService.findAll();
