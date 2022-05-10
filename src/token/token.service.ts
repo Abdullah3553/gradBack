@@ -1,7 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { UpdateTokenDto } from './dto/update-token.dto';
 import {PrismaService} from "../prisma/prisma.service";
-import crypto from "crypto";
+import {createHash} from "crypto";
+
 const jwt = require('jsonwebtoken');
 
 
@@ -12,7 +13,7 @@ export class TokenService {
   constructor(private prisma: PrismaService,) {}
 
   private hashToken(token) {
-    return crypto.createHash('sha256').update(token).digest('hex');
+    return createHash('sha256').update(token).digest('hex');
   }
 
   async createRefreshToken(userId: number) {
