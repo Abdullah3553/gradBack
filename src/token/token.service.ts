@@ -1,13 +1,7 @@
 import { Injectable } from '@nestjs/common';
-import { CreateTokenDto } from './dto/create-token.dto';
 import { UpdateTokenDto } from './dto/update-token.dto';
 import {PrismaService} from "../prisma/prisma.service";
 import crypto from "crypto";
-import {RegisterDto} from "./dto/register.dto";
-import {UserService} from "../user/user.service";
-import {CreateUserDto} from "../user/dto/create-user.dto";
-import { AuthenticatorService } from 'src/authenticator/authenticator.service';
-import { CreateAuthenticatorDto } from 'src/authenticator/dto/create-authenticator.dto';
 const jwt = require('jsonwebtoken');
 
 
@@ -15,10 +9,7 @@ const jwt = require('jsonwebtoken');
 @Injectable()
 export class TokenService {
 
-  constructor(private prisma: PrismaService,
-              private userService: UserService,
-              private authenticatorService: AuthenticatorService
-  ) {}
+  constructor(private prisma: PrismaService,) {}
 
   private hashToken(token) {
     return crypto.createHash('sha256').update(token).digest('hex');
@@ -99,7 +90,7 @@ export class TokenService {
 
 
 // Usually I keep the token between 5 minutes - 15 minutes
-  private generateAccessToken(userId) {
+  generateAccessToken(userId) {
     return jwt.sign({ userId: userId }, process.env.JWT_ACCESS_SECRET, {
       expiresIn: '5m',
     });
@@ -121,28 +112,6 @@ export class TokenService {
       accessToken,
       refreshToken,
     };
-  }
-  async registerNewUser(user:RegisterDto){
-    /*
-    to register a user we need to do 3 things :
-     1) Create and store a new user with the sent user data and the default role
-     2) use the generated userId to create and store all sent authenticators
-     3) Generate the access token and refresh token and send it as a response to that user (in other words login for that user)
-    */
-    const newUser = await this.userService.create(user)//step 1
-    for(let i =0, arr=user.authenticators;i<arr.length;i++){
-      const auth_method = arr[i];
-      let authenticator = new CreateAuthenticatorDto()
-      authenticator = {...auth_method, userId:newUser.id}
-      await this.authenticatorService.create(authenticator)//step 2
-    }
-    const refreshToken = await this.createRefreshToken(newUser.id)
-    const accessToken = this.generateAccessToken(newUser.id)
-
-    return{
-      refreshToken:refreshToken.hashedToken,
-      accessToken:accessToken
-    }
   }
 
 };

@@ -4,14 +4,43 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import {PrismaService} from "../prisma/prisma.service";
 import * as moment from 'moment' ;
 import {TokenService} from "../token/token.service";
+import {RegisterDto} from "./dto/register.dto";
+import {CreateAuthenticatorDto} from "../authenticator/dto/create-authenticator.dto";
+import {AuthenticatorService} from "../authenticator/authenticator.service";
 
 
 
 @Injectable()
 export class UserService {
-  constructor(private readonly prisma : PrismaService) {
+  constructor(private readonly prisma : PrismaService,
+              private tokenService: TokenService,
+              private authenticatorService: AuthenticatorService
+  ) {}
+
+
+  async registerNewUser(user:RegisterDto){
+    /*
+    to register a user we need to do 3 things :
+     1) Create and store a new user with the sent user data and the default role
+     2) use the generated userId to create and store all sent authenticators
+     3) Generate the access token and refresh token and send it as a response to that user (in other words login for that user)
+    */
+    const newUser = await this.create(user)//step 1
+    for(let i =0, arr=user.authenticators;i<arr.length;i++){
+      const auth_method = arr[i];
+      let authenticator = new CreateAuthenticatorDto()
+      authenticator = {...auth_method, userId:newUser.id}
+      await this.authenticatorService.create(authenticator)//step 2
+    }
+    const refreshToken = await this.tokenService.createRefreshToken(newUser.id)
+    const accessToken = this.tokenService.generateAccessToken(newUser.id)
+
+    return{
+      refreshToken:refreshToken.hashedToken,
+      accessToken:accessToken
+    }
   }
-  private tokenService: TokenService;
+
   async create(request: CreateUserDto) {
     const user = await this.prisma.user.create({
       data:{

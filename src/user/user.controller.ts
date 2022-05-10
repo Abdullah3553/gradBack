@@ -2,10 +2,17 @@ import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/commo
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import {RegisterDto} from "./dto/register.dto";
 
 @Controller('user')
 export class UserController {
   constructor(private readonly userService: UserService) {}
+
+  @Post('/register')
+  register(@Body() req: RegisterDto)
+  {
+    return this.userService.registerNewUser(req)
+  }
 
   @Post('/new')
   create(@Body() createUserDto: CreateUserDto) {
