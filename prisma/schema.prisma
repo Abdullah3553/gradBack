@@ -11,9 +11,10 @@ datasource db {
 }
 
 model Authentication_method {
-  id        Int    @id @default(autoincrement())
-  title     String @unique
-  file_path String?
+  id            Int                 @id @default(autoincrement())
+  title         String              @unique
+  revresable    Boolean             @default(false)
+  file_path     String?
   authenticator Authenticator[]
 
 }
