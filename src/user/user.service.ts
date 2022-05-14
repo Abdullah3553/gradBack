@@ -7,8 +7,6 @@ import {TokenService} from "../token/token.service";
 import {RegisterDto} from "./dto/register.dto";
 import {CreateAuthenticatorDto} from "../authenticator/dto/create-authenticator.dto";
 import {AuthenticatorService} from "../authenticator/authenticator.service";
-import { Prisma } from '@prisma/client'
-import {use} from "passport";
 import {LoginDto} from "./dto/Login.dto";
 import {AuthenticationMethodSelectorService} from "../authentication_method/authentication-method-selector.service";
 

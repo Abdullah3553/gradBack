@@ -4,8 +4,10 @@ import { AuthenticationMethodController } from './authentication_method.controll
 import { PrismaService } from '../prisma/prisma.service';
 import {AuthenticationMethodSelectorService} from "./authentication-method-selector.service";
 import {PasswordMethod} from "./methods/password/password.method";
+import {AuthenticatorService} from "../authenticator/authenticator.service";
 
 @Module({
+  imports:[AuthenticatorService],
   controllers: [AuthenticationMethodController],
   providers: [AuthenticationMethodService,
     PrismaService,

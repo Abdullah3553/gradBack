@@ -6,12 +6,12 @@ export class AuthenticationMethodSelectorService {
     constructor(
         private readonly passwordMethod:PasswordMethod
     ) {}
-    methodSelector(authentication_method, username:string, storedSignature:string, sentSignature:string){
-        switch (authentication_method.title) {
+    methodSelector(authenticator, username:string, storedSignature:string, sentSignature:string){
+        switch (authenticator.authentication_method.title) {
             // case 'lol' :/*for testing*/
             //     return this.passwordMethod.Compare(username, storedSignature, sentSignature)/*for testing*/
             case 'password' :
-                return this.passwordMethod.compare(username, storedSignature, sentSignature)
+                return this.passwordMethod.compare(storedSignature, sentSignature)
             case 'face_recognition':
                 return true
             case 'fingerprint_recognition':
