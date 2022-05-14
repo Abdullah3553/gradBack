@@ -1,3 +1,3 @@
 export interface BaseMethod {
-    compare(username: string, hashedStoredSignature, sentSignature, filePath): boolean
+    compare( hashedStoredSignature, sentSignature, authenticator?, username?:string, filePath?): Object
 }
