@@ -38,6 +38,7 @@ model Authenticator {
   id           Int    @id @default(autoincrement())
   signature    String
   priority     Int
+  createdAt     DateTime       @default(now())
   user         User   @relation(references: [id], fields: [userId])
   userId       Int
   authentication_method Authentication_method @relation(references:[id], fields:[authentication_methodId])
