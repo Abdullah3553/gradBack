@@ -1,5 +1,5 @@
 import {Injectable} from "@nestjs/common";
-import {PasswordMethod} from "./methods/password/password";
+import {PasswordMethod} from "./methods/password/password.method";
 
 @Injectable()
 export class AuthenticationMethodSelectorService {
@@ -11,7 +11,7 @@ export class AuthenticationMethodSelectorService {
             // case 'lol' :/*for testing*/
             //     return this.passwordMethod.Compare(username, storedSignature, sentSignature)/*for testing*/
             case 'password' :
-                return this.passwordMethod.Compare(username, storedSignature, sentSignature)
+                return this.passwordMethod.compare(username, storedSignature, sentSignature)
             case 'face_recognition':
                 return true
             case 'fingerprint_recognition':
