@@ -3,6 +3,7 @@ import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import {RegisterDto} from "./dto/register.dto";
+import {LoginDto} from "./dto/Login.dto";
 
 @Controller('user')
 export class UserController {
@@ -12,6 +13,11 @@ export class UserController {
   register(@Body() req: RegisterDto)
   {
     return this.userService.registerNewUser(req)
+  }
+
+  @Post('/login')
+  login(@Body() req:LoginDto){
+    return this.userService.login(req)
   }
 
   @Post('/new')

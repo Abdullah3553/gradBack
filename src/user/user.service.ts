@@ -1,4 +1,4 @@
-import {Injectable, NotFoundException} from '@nestjs/common';
+import {BadRequestException, Injectable, NotFoundException} from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import {PrismaService} from "../prisma/prisma.service";
@@ -9,15 +9,74 @@ import {CreateAuthenticatorDto} from "../authenticator/dto/create-authenticator.
 import {AuthenticatorService} from "../authenticator/authenticator.service";
 import { Prisma } from '@prisma/client'
 import {use} from "passport";
+import {LoginDto} from "./dto/Login.dto";
+import {AuthenticationMethodSelectorService} from "../authentication_method/authentication-method-selector.service";
 
 
 
 @Injectable()
 export class UserService {
   constructor(private readonly prisma : PrismaService,
-              private tokenService: TokenService,
-              private authenticatorService: AuthenticatorService
+              private readonly tokenService: TokenService,
+              private readonly authenticatorService: AuthenticatorService,
+              private readonly authenticationMethodSelector: AuthenticationMethodSelectorService
   ) {}
+
+  async login(userData:LoginDto){
+    const userChecker = await this.prisma.user.findUnique({
+      where:{username:userData.username},
+      include: {
+        Authenticator: {
+          include: {
+            authentication_method: true
+          }
+        }
+      }
+    })
+     //return userChecker // for API testing ...
+    if(!userChecker){
+      throw new NotFoundException({message:"User not found"})
+    }
+    userChecker.Authenticator.sort((obj1, obj2)=>{
+      return obj1.priority - obj2.priority  // sort by priority
+    })
+    userData.authenticators.sort((obj1, obj2)=>{
+      return obj1.priority - obj2.priority  // sort by priority
+    })
+    let isUserValid = 0;// 1 -> valid user , 0 -> invalid user
+    for(let i=0, arr=userData.authenticators;i<arr.length;i++){
+      // For each method we should execute that method module to validate signatures data
+      //1)Sequence checking
+      if(arr[i].authentication_methodId === userChecker.Authenticator[i].authentication_methodId){
+        // the [i] method is in the right sequence
+        // so we must check the signature data
+        const isAuthenticated = this.authenticationMethodSelector.methodSelector(
+            userChecker.Authenticator[i].authentication_method,
+            userChecker.username,
+            userChecker.Authenticator[i].signature,
+            userData.authenticators[i].signature
+            )
+        if(!isAuthenticated){
+          // the authenticator sent by the user doesn't match the stored data
+          isUserValid = 0;
+          throw new BadRequestException({message:"Wrong credentials"})
+        }
+        // line after this comment means that the user authenticators are valid
+        isUserValid = 1;
+      }else{
+        throw new BadRequestException({message:"Wrong Sequence"})
+      }
+    }
+    if(isUserValid === 1){
+      // we should generate tokens for the user and return them
+      const refreshToken = await this.tokenService.createRefreshToken(userChecker.id)
+      const accessToken = this.tokenService.generateAccessToken(userChecker.id)
+      return {
+        refreshToken:refreshToken.hashedToken,
+        accessToken
+      }
+    }
+  }
 
   async getUserAuthenticationMethods(username:string){
     const user = await this.prisma.user.findUnique({
