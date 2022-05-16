@@ -31,4 +31,5 @@ export class AuthenticationMethodController {
   remove(@Param('id') id:string) {
     return this.authenticationMethodService.remove(Number(id));
   }
+
 }
