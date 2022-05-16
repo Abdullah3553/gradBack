@@ -12,5 +12,10 @@ export class FaceRecognitionMethod implements BaseMethod{
         // const tmp = createHash('sha256').update(hashedStoredSignature).digest('hex')/*for testing*/
         // if(hashedSentSignature === tmp)return true/*for testing*/
         return response
+
+    }
+    saveimageRegister(file: Express.Multer.File)
+    {
+
     }
 }

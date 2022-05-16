@@ -7,6 +7,7 @@ import {PasswordMethod} from "./methods/password/password.method";
 import {AuthenticatorService} from "../authenticator/authenticator.service";
 import {MethodsController} from "./methods/methods.controller";
 import {OtpMethod} from "./methods/OTP/otp.method";
+import {FaceRecognitionMethod} from "./methods/face_recognition/faceRecognition.method";
 
 @Module({
   imports:[AuthenticationMethodModule],
@@ -15,7 +16,8 @@ import {OtpMethod} from "./methods/OTP/otp.method";
     PrismaService,
     AuthenticationMethodSelectorService,
     PasswordMethod,
-    OtpMethod
+    OtpMethod,
+      FaceRecognitionMethod
   ],
   exports:[AuthenticationMethodSelectorService]
 })
