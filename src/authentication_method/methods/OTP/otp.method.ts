@@ -3,6 +3,8 @@ import {BaseMethod} from "../base.method";
 import * as moment from 'moment' ;
 import { unitOfTime } from 'moment';
 import {AuthenticatorService} from "../../../authenticator/authenticator.service";
+import {generate} from "otp-generator";
+import * as nodemailer from 'nodemailer'
 
 const otpDuration = {
     duration:Number(process.env.OTP_DURATION),
@@ -39,6 +41,32 @@ export class OtpMethod implements BaseMethod{
             return true
         }
         return false
+    }
+
+    async sendOtp(userEmail){
+        const otpOptions = {
+            upperCaseAlphabets: false,
+            specialChars: false,
+            lowerCaseAlphabets:false,
+        }
+        const otp = generate(6, otpOptions);
+        let transport = nodemailer.createTransport({
+            host: "smtp.gmail.com",
+            port: 465,
+            secure: true,
+            auth: {
+                user: process.env.OTP_EMAIL,
+                pass: process.env.OTP_EMAIL_PASSWORD,
+            }
+        });
+
+        const mailOptions = {
+            from: 'auth.sys.grad@gmail.com', // Sender address
+            to: 'aboudy.a2000@gmail.com', // List of recipients
+            subject: 'Node Mailer', // Subject line
+            text: `Hello, The otp is ${otp}`, // Plain text body
+        };
+        const info = await transport.sendMail(mailOptions);
     }
 
 
