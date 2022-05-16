@@ -43,7 +43,7 @@ export class OtpMethod implements BaseMethod{
         return false
     }
 
-    async sendOtp(userEmail){
+    async sendOtp(userEmail:string){
         const otpOptions = {
             upperCaseAlphabets: false,
             specialChars: false,
@@ -61,12 +61,14 @@ export class OtpMethod implements BaseMethod{
         });
 
         const mailOptions = {
-            from: 'auth.sys.grad@gmail.com', // Sender address
-            to: 'aboudy.a2000@gmail.com', // List of recipients
+            from: process.env.OTP_EMAIL, // Sender address
+            to: userEmail, // List of recipients
             subject: 'Node Mailer', // Subject line
             text: `Hello, The otp is ${otp}`, // Plain text body
         };
         const info = await transport.sendMail(mailOptions);
+        if(info.accepted.find(obj => obj === userEmail)) return true
+        else return false
     }
 
 
