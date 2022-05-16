@@ -6,14 +6,16 @@ import {AuthenticationMethodSelectorService} from "./authentication-method-selec
 import {PasswordMethod} from "./methods/password/password.method";
 import {AuthenticatorService} from "../authenticator/authenticator.service";
 import {MethodsController} from "./methods/methods.controller";
+import {OtpMethod} from "./methods/OTP/otp.method";
 
 @Module({
-  imports:[AuthenticatorService],
+  imports:[AuthenticationMethodModule],
   controllers: [AuthenticationMethodController, MethodsController],
   providers: [AuthenticationMethodService,
     PrismaService,
     AuthenticationMethodSelectorService,
-    PasswordMethod
+    PasswordMethod,
+    OtpMethod
   ],
   exports:[AuthenticationMethodSelectorService]
 })
