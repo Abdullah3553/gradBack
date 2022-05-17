@@ -1,6 +1,7 @@
 import {
     BadRequestException,
     Body,
+    Request,
     Controller,
     Post,
     UploadedFile,
@@ -26,27 +27,35 @@ export class MethodsController{
         return this.otpMethod.sendOtp(email)
     }
 
+    // @Post('/test')
+    // @UseInterceptors(FileInterceptor('file'))
+    // test(@Request() req){
+    //    return this.faceRecognitionMethod.saveimageRegister(req);
+    // }
+
     @Post('/face/register') //for registration
     @UseInterceptors(FileInterceptor('file', {
         storage: diskStorage({
             destination: 'src/authentication_method/methods/face_recognition/storage/known'
             , filename: (req, file, cb) => {
-                const fileName = req.query.username
-                const path = `src/authentication_method/methods/face_recognition/storage/known/${fileName}${extname(file.originalname)}`
+                let random_num = ""
+                for (let i=0 ; i<10 ; i++)
+                {
+                    random_num += Math.floor(Math.random() * 10).toString();
+                }
+                random_num+=req.query.username
+                const path = `src/authentication_method/methods/face_recognition/storage/known/${random_num}${extname(file.originalname)}`
                 if(fs.existsSync(path)){
                     cb(new BadRequestException('File exists already'),'')
                 }
                 //Calling the callback passing the random name generated with the original extension name
-                cb(null, `${fileName}${extname(file.originalname)}`)
+                cb(null, `${random_num}${extname(file.originalname)}`)
             }
         })
     })
     )
-    uploadFileRegister() {
-        return {
-            message:"file Uploaded successfully",
-            success:true
-        }
+    uploadFileRegister(@UploadedFile() file: Express.Multer.File, @Body('authenticatorId') authenticatorId) {
+        return this.faceRecognitionMethod.test(file.path, Number(authenticatorId));
     }
     @Post('/face/login')
     @UseInterceptors(FileFieldsInterceptor([{ name: 'image', maxCount: 5 }],{
