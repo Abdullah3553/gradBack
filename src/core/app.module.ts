@@ -8,7 +8,7 @@ import { UserModule } from '../user/user.module';
 import {PrivilegesModule} from "../privileges/privileges.module";
 
 @Module({
-  imports: [AuthenticationMethodModule, RoleModule, AuthenticatorModule, UserModule ,PrivilegesModule], // @TODO @Omniaashraf123 Adding privileges module
+  imports: [AuthenticationMethodModule, RoleModule, AuthenticatorModule, UserModule ,PrivilegesModule],
   controllers: [AppController],
   providers: [AppService],
 })

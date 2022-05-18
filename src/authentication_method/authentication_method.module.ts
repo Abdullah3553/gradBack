@@ -4,14 +4,14 @@ import { AuthenticationMethodController } from './authentication_method.controll
 import { PrismaService } from '../prisma/prisma.service';
 import {AuthenticationMethodSelectorService} from "./authentication-method-selector.service";
 import {PasswordMethod} from "./methods/password/password.method";
-import {MethodsController} from "./methods/methods.controller";
 import {OtpMethod} from "./methods/OTP/otp.method";
 import {FaceRecognitionMethod} from "./methods/face_recognition/faceRecognition.method";
 import {AuthenticatorModule} from "../authenticator/authenticator.module";
+import {MethodsController} from "./methods/methods.controller";
 
 @Module({
   imports:[AuthenticatorModule],
-  controllers: [AuthenticationMethodController, MethodsController],
+  controllers: [MethodsController,AuthenticationMethodController, ],
   providers: [AuthenticationMethodService,
     PrismaService,
     AuthenticationMethodSelectorService,

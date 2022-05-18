@@ -13,6 +13,7 @@ export class AuthenticationMethodSelectorService {
             case 'password' :
                 return this.passwordMethod.compare(storedSignature, sentSignature)
             case 'face_recognition':
+
                 return true
             case 'fingerprint_recognition':
                 return true

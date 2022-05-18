@@ -1,12 +1,10 @@
 import {
     BadRequestException,
     Body,
-    Request,
-    Controller,
     Post,
     UploadedFile,
     UploadedFiles,
-    UseInterceptors
+    UseInterceptors, Get, Controller
 } from "@nestjs/common";
 import {OtpMethod} from "./OTP/otp.method";
 import {FileFieldsInterceptor, FileInterceptor} from "@nestjs/platform-express";
@@ -55,6 +53,9 @@ export class MethodsController{
     })
     )
     uploadFileRegister(@UploadedFile() file: Express.Multer.File, @Body('authenticatorId') authenticatorId) {
+        return {
+            path:file.path.toString()
+        }
         return this.faceRecognitionMethod.test(file.path, Number(authenticatorId));
     }
     @Post('/face/login')
@@ -77,5 +78,6 @@ export class MethodsController{
     uploadFileLogin(@UploadedFiles() files: { image?: Express.Multer.File[] }) {
         console.log(files);
     }
+
 
 }
