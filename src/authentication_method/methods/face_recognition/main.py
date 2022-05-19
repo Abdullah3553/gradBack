@@ -4,7 +4,7 @@ import numpy as np
 import sys
 import os
 
-
+# args[1]
 def main(args):
     # Load a sample picture and learn how to recognize it.
     known_image = face_recognition.load_image_file(args[1])

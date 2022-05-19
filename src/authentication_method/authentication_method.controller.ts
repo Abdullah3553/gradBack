@@ -7,8 +7,16 @@ import { UpdateAuthenticationMethodDto } from './dto/update-authentication_metho
 export class AuthenticationMethodController {
   constructor(private readonly authenticationMethodService: AuthenticationMethodService) {}
 
+
   @Post('/new') //to take the data from user
   create(@Body() request_body: CreateAuthenticationMethodDto) {
+    /*
+    check for the access toke and reresh token validty
+    * */
+
+    /*
+    check for role and privilage validty
+    * */
     return this.authenticationMethodService.create(request_body);
   }
 

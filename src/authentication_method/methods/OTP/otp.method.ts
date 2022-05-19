@@ -25,7 +25,7 @@ export class OtpMethod implements BaseMethod{
         const hashedSentSignature = createHash('sha256').update(sentSignature).digest('hex');
         if(hashedStoredSignature === hashedSentSignature) {
             response.valid = true
-            response.message = 'OTP is the valid'
+            response.message = 'OTP is ? valid'
             this.authenticatorService.remove(Number(authenticator.id)) // delete the otp
         }
         // const tmp = createHash('sha256').update(hashedStoredSignature).digest('hex')/*for testing*/
@@ -33,8 +33,8 @@ export class OtpMethod implements BaseMethod{
         return response
     }
      isOtpExpired(createdAt:string, otpId:number){
-        const now = moment()
-        const otpDate = moment(createdAt)
+        const now = moment()//2022-05-19T01:53:15
+        const otpDate = moment(createdAt) // date otp created at
         if(now.diff(otpDate,<unitOfTime.DurationConstructor>otpDuration.type) > otpDuration.duration){
             // otp has expired
             this.authenticatorService.remove(Number(otpId)) // delete the otp

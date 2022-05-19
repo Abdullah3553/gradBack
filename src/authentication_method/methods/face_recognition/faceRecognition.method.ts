@@ -8,17 +8,15 @@ import {AuthenticatorService} from "../../../authenticator/authenticator.service
 export class FaceRecognitionMethod implements BaseMethod{
     constructor(private authenticatorService : AuthenticatorService) {
     }
-    compare(username:string, hashedStoredSignature:string, sentSignature:string, filePath:string){
-        const response = {valid:false, message:'Face is not being recognized'}
-        const hashedSentSignature = createHash('sha256').update(sentSignature).digest('hex');
-        if(hashedStoredSignature === hashedSentSignature){
-            response.valid=true
-            response.message = 'face has been recognized'
-        }
-        // const tmp = createHash('sha256').update(hashedStoredSignature).digest('hex')/*for testing*/
-        // if(hashedSentSignature === tmp)return true/*for testing*/
-        return response
+    compare(encryptedStoredSignature:string, sentSignature:string , filePath:string){
+        // encryptedStoredSignature is the file path for the known face image
+        // sentSignature is the file path for the unknown face images
+        //1) Decrypt the encryptedStoredSignature
+        //2) execute the python module with command line
+        //3) return formatted response
+        return {
 
+        }
     }
     // saveimageRegister(req)
     // {

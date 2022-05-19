@@ -41,6 +41,7 @@ export class UserService {
     userData.authenticators.sort((obj1, obj2)=>{
       return obj1.priority - obj2.priority  // sort by priority
     })
+
     let isUserValid = 0;// 1 -> valid user , 0 -> invalid user
     for(let i=0, arr=userData.authenticators;i<arr.length;i++){
       // For each method we should execute that method module to validate signatures data
@@ -49,7 +50,7 @@ export class UserService {
         // the [i] method is in the right sequence
         // so we must check the signature data
         const isAuthenticated = this.authenticationMethodSelector.methodSelector(
-            userChecker.Authenticator[i].authentication_method,
+            userChecker.Authenticator[i],
             userChecker.username,
             userChecker.Authenticator[i].signature,
             userData.authenticators[i].signature
@@ -105,7 +106,7 @@ export class UserService {
   async registerNewUser(user:RegisterDto){
     /*
     to register a user we need to do 3 things :
-     1) Create and store a new user with the sent user data and the default role
+     1) Create and store a new user with the sent user data and the default role -
      2) use the generated userId to create and store all sent authenticators
      3) Generate the access token and refresh token and send it as a response to that user (in other words login for that user)
     */
