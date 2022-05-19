@@ -14,6 +14,7 @@ import { extname } from 'path'
 import * as fs from 'fs'
 import * as crypto from 'crypto'
 import {createHash} from "crypto";
+const path = require("path");
 
 
 @Controller('methods')
@@ -90,12 +91,21 @@ export class MethodsController{
                 }
             })
     }
-    @Get('test/:name')
-    test(@Param('name') name:string){
-        const { publicKey, privateKey } = crypto.generateKeyPairSync("rsa", {
-            // The standard secure default length for RSA keys is 2048 bits
-            modulusLength: 2048,
+    @Post('test/')
+    test(@Body('name') name:string){
+        const privateKey = crypto.createPrivateKey({
+            key: fs.readFileSync(path.resolve(__dirname, "../../../RSA_Key/private.pem")),
+            format:'pem',
+            type:'pkcs1'
+        });
+        const publicKey = crypto.createPublicKey({
+            key:privateKey.export({format:'pem', type:'pkcs1'}),
+            format:'pem',
+            type:'pkcs1'
         })
+        console.log(privateKey.export({format:'pem', type:'pkcs1'}));
+        console.log(publicKey.export({format:'pem', type:'pkcs1'}));
+        const data = name
         const encryptedData = crypto.publicEncrypt(
             {
                 key: publicKey,
@@ -103,20 +113,20 @@ export class MethodsController{
                 oaepHash: "sha256",
             },
             // We convert the data string to a buffer using `Buffer.from`
-            Buffer.from(name)
+            Buffer.from(data)
         )
         return {
-            encryptedData:encryptedData.toString("base64")
+            encryptedData:encryptedData.toString('base64')
         }
     }
 
     @Post('test2/')
     test2(@Body('name') name:string){
-        console.log(name)
-        const { publicKey, privateKey } = crypto.generateKeyPairSync("rsa", {
-            // The standard secure default length for RSA keys is 2048 bits
-            modulusLength: 2048,
-        })
+        const privateKey = crypto.createPrivateKey({
+            key: fs.readFileSync(path.resolve(__dirname, "../../../RSA_Key/private.pem")),
+            format:'pem',
+            type:'pkcs1'
+        });
         const decryptedData = crypto.privateDecrypt(
             {
                 key: privateKey,
@@ -126,10 +136,10 @@ export class MethodsController{
                 padding: crypto.constants.RSA_PKCS1_OAEP_PADDING,
                 oaepHash: "sha256",
             },
-            Buffer.from(name)
+            Buffer.from(name, 'base64')
         )
         return {
-            decryptedData
+            decryptedData:decryptedData.toString()
         }
     }
 
