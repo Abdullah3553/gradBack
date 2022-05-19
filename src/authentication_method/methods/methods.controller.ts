@@ -93,8 +93,14 @@ export class MethodsController{
     }
     @Post('test/')
     test(@Body('name') name:string){
+        const envKey = process.env.RSA_PRIVATE_KEY.split('\\n')
+        envKey.pop()
+        let key = '-----BEGIN RSA PRIVATE KEY-----\n'
+        envKey.forEach(obj => key+= (obj+'\n'))
+        key +='-----END RSA PRIVATE KEY-----\n'
         const privateKey = crypto.createPrivateKey({
-            key: fs.readFileSync(path.resolve(__dirname, "../../../RSA_Key/private.pem")),
+            // key: fs.readFileSync(path.resolve(__dirname, "../../../RSA_Key/private.pem")),
+            key: key, // for a higher security
             format:'pem',
             type:'pkcs1'
         });
@@ -103,8 +109,6 @@ export class MethodsController{
             format:'pem',
             type:'pkcs1'
         })
-        console.log(privateKey.export({format:'pem', type:'pkcs1'}));
-        console.log(publicKey.export({format:'pem', type:'pkcs1'}));
         const data = name
         const encryptedData = crypto.publicEncrypt(
             {
@@ -122,8 +126,14 @@ export class MethodsController{
 
     @Post('test2/')
     test2(@Body('name') name:string){
+        const envKey = process.env.RSA_PRIVATE_KEY.split('\\n')
+        envKey.pop()
+        let key = '-----BEGIN RSA PRIVATE KEY-----\n'
+        envKey.forEach(obj => key+= (obj+'\n'))
+        key +='-----END RSA PRIVATE KEY-----\n'
         const privateKey = crypto.createPrivateKey({
-            key: fs.readFileSync(path.resolve(__dirname, "../../../RSA_Key/private.pem")),
+            // key: fs.readFileSync(path.resolve(__dirname, "../../../RSA_Key/private.pem")),
+            key: key, // for a higher security
             format:'pem',
             type:'pkcs1'
         });
