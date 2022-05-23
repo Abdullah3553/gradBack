@@ -6,7 +6,7 @@ export class PasswordMethod implements BaseMethod{
     compare(hashedStoredSignature:string, sentSignature:string){
         const response = {valid:false, message:'Password is not valid'} // if not valid
         const hashedSentSignature = createHash('sha256').update(sentSignature).digest('hex'); //coding data
-        if(hashedStoredSignature === hashedSentSignature){
+        if(hashedStoredSignature === sentSignature){
             response.valid = true
             response.message= "Password is valid"
         }

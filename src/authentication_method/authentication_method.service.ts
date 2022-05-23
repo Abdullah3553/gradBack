@@ -54,7 +54,7 @@ export class AuthenticationMethodService {
   ) {
     const checker = await this.prisma.authentication_method.findUnique({
       where: {
-        title: updateAuthenticationMethodDto.title,
+        title: updateAuthenticationMethodDto.title,id
       },
     });
     if (checker.id && checker.id != id) {
@@ -69,6 +69,7 @@ export class AuthenticationMethodService {
         data: {
           title: updateAuthenticationMethodDto.title,
           file_path: updateAuthenticationMethodDto.file_path,
+          revresable: updateAuthenticationMethodDto.revresable
         },
       });
     return update_authentication;

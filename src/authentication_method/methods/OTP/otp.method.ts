@@ -5,15 +5,19 @@ import { unitOfTime } from 'moment';
 import {AuthenticatorService} from "../../../authenticator/authenticator.service";
 import {generate} from "otp-generator";
 import * as nodemailer from 'nodemailer'
+import { PrismaService } from "src/prisma/prisma.service";
+import { Injectable } from "@nestjs/common";
 
 const otpDuration = {
     duration:Number(process.env.OTP_DURATION),
     type:process.env.OTP_DURATION_TYPE
 }
 
+@Injectable()
 export class OtpMethod implements BaseMethod{
     constructor(
-        private readonly authenticatorService :AuthenticatorService
+        private readonly authenticatorService :AuthenticatorService,
+        private readonly prisma :PrismaService
     ) {}
     compare(hashedStoredSignature:string, sentSignature:string, authenticator){
         const response = {valid:false, message:'OTP is not valid'}
@@ -43,7 +47,10 @@ export class OtpMethod implements BaseMethod{
         return false
     }
 
-    async sendOtp(userEmail:string){
+    async sendOtp(username:string){
+        let user = await this.prisma.user.findUnique({
+            where:{username}
+        })
         const otpOptions = {
             upperCaseAlphabets: false,
             specialChars: false,
@@ -62,12 +69,12 @@ export class OtpMethod implements BaseMethod{
 
         const mailOptions = {
             from: process.env.OTP_EMAIL, // Sender address
-            to: userEmail, // List of recipients
-            subject: 'Node Mailer', // Subject line
+            to: user.email, // List of recipients
+            subject: 'Authentication System OTP', // Subject line
             text: `Hello, The otp is ${otp}`, // Plain text body
         };
         const info = await transport.sendMail(mailOptions);
-        if(info.accepted.find(obj => obj === userEmail)) return true
+        if(info.accepted.find(obj => obj === user.email)) return true
         else return false
     }
 

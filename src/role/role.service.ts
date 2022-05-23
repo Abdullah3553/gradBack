@@ -5,7 +5,8 @@ import { PrismaService } from '../prisma/prisma.service';
 
 @Injectable()
 export class RoleService {
-  constructor(private prisma: PrismaService) {}
+  constructor(private readonly prisma: PrismaService,
+              ) {}
 
   async create(createRoleDto: CreateRoleDto) {
     const privileges = createRoleDto.privileges?.map(( privilege) => ({

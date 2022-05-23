@@ -3,8 +3,9 @@ import {BaseMethod} from "../base.method";
 import * as multer from "multer";
 import * as path from "path";
 import {AuthenticatorService} from "../../../authenticator/authenticator.service";
+import {Injectable} from "@nestjs/common";
 
-
+@Injectable()
 export class FaceRecognitionMethod implements BaseMethod{
     constructor(private authenticatorService : AuthenticatorService) {
     }

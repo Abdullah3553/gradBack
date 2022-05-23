@@ -10,4 +10,5 @@ export class CreateAuthenticationMethodDto {
   @IsString()
   file_path?: string;
 
+  revresable:boolean
 }

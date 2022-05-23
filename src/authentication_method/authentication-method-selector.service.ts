@@ -13,13 +13,14 @@ export class AuthenticationMethodSelectorService {
             // case 'lol' :/*for testing*/
             //     return this.passwordMethod.Compare(username, storedSignature, sentSignature)/*for testing*/
             case 'password' :
-                return this.passwordMethod.compare(storedSignature, sentSignature).valid
+                const res =this.passwordMethod.compare(storedSignature, sentSignature)
+                return res.valid
             case 'face_recognition':
-
                 return true
             case 'fingerprint_recognition':
                 return true
             case 'otp':
+                return true
                 return this.otpMethod.compare(storedSignature, sentSignature, authenticator.id).valid
             case 'qr':
                 return true
