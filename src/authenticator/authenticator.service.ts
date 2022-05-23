@@ -55,7 +55,12 @@ export class AuthenticatorService {
   }
 
   async findAll() {
-    return await this.prisma.authenticator.findMany();
+    return await this.prisma.authenticator.findMany({
+      include:{
+        authentication_method:true,
+        user:true
+      }
+    });
   }
 
   async findByuserId(userId: number) {
@@ -70,6 +75,10 @@ export class AuthenticatorService {
       where: {
         id: id,
       },
+      include:{
+        authentication_method:true,
+        user:true
+      }
     });
   }
 
