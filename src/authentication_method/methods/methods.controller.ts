@@ -72,11 +72,16 @@ export class MethodsController{
                 random_num+=req.query.username
                 const path = `src/authentication_method/methods/face_recognition/storage/unknown/${req.query.username}/${random_num}${extname(file.originalname)}`
                 const folderName = `src/authentication_method/methods/face_recognition/storage/unknown/${req.query.username}`
-                if (fs.existsSync(folderName)  && folderFlag) {
-                    fs.rmSync(folderName, { recursive: true });
-                    folderFlag = false
+
+                if(req.query.flag ==='f'){
+                    req.query.flag = 'nf'
+                    if (fs.existsSync(folderName))
+                        fs.rmSync(folderName, { recursive: true });
+
                     fs.mkdirSync(folderName);
                 }
+
+
                 if(fs.existsSync(path) ){
                     cb(new BadRequestException('File exists already'),'')
                 }

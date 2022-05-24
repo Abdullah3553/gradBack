@@ -10,11 +10,7 @@ export class FaceRecognitionMethod implements BaseMethod{
     constructor(private authenticatorService : AuthenticatorService) {
     }
     compare(encryptedStoredSignature:string, sentSignature:string , filePath:string){
-        // encryptedStoredSignature is the file path for the known face image
-        // sentSignature is the file path for the unknown face images
-        //1) Decrypt the encryptedStoredSignature
-        //2) execute the python module with command line
-        //3) return formatted response
+        // @ TODO with Aseel Coding style
         return {
 
         }
