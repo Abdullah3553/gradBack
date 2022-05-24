@@ -6,10 +6,12 @@ import {TokenService} from "../token/token.service";
 import {AuthenticatorService} from "../authenticator/authenticator.service";
 import {AuthenticationMethodSelectorService} from "../authentication_method/authentication-method-selector.service";
 import {UserService} from "./user.service";
+import {PrismaService} from "../prisma/prisma.service";
 
 @Injectable()
 export class GuestService{
-    constructor(private readonly tokenService: TokenService,
+    constructor(private readonly prisma : PrismaService,
+                private readonly tokenService: TokenService,
                 private readonly authenticatorService: AuthenticatorService,
                 private readonly authenticationMethodSelector: AuthenticationMethodSelectorService,
                 private readonly userService:UserService
@@ -80,6 +82,47 @@ export class GuestService{
         return{
             refreshToken:refreshToken.hashedToken,
             accessToken:accessToken
+        }
+    }
+
+    async checkUserIdentifiers(username:string, email:string){
+        const response ={
+            message:'',
+            valid:false
+        }
+        const check1 = await this.checkGuestUsername(username)
+        const check2 = await this.checkGuestEmail(email)
+        response.message = `${check1.message} ${check2.message}`
+        response.valid = check1.valid && check2.valid
+        return response
+    }
+
+    async checkGuestUsername(username:string){
+        const userChecker = await this.prisma.user.findUnique({
+            where:{username}
+        })
+        if(userChecker){
+            // the username is used
+            throw new BadRequestException({valid:false,message:"The username is used"})
+        }
+        //else means return true which means the username is valid
+        return {
+            valid:true,
+            message:"username is available"
+        }
+    }
+    async checkGuestEmail(email:string){
+        const userChecker = await this.prisma.user.findUnique({
+            where:{email}
+        })
+        if(userChecker){
+            // the email is used
+            throw new BadRequestException({valid:false,message:"The email is used"})
+        }
+        //else means return true which means the email is valid
+        return {
+            valid:true,
+            message:"email is available"
         }
     }
 

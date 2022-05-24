@@ -18,6 +18,11 @@ export class UserController {
     return this.guestService.registerNewUser(req)
   }
 
+  @Post('/register/check')
+  checkUserIdentifiers(@Body() body){
+    return this.guestService.checkUserIdentifiers(body.username, body.email)
+  }
+
   @Post('/login')
   login(@Body() req:LoginDto){
     return this.guestService.login(req)
