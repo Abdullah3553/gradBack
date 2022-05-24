@@ -8,7 +8,7 @@ export class AuthenticationMethodSelectorService {
         private readonly passwordMethod:PasswordMethod,
         private readonly otpMethod:OtpMethod
     ) {}
-    methodSelector(authenticator, username:string, storedSignature:string, sentSignature:string){
+    async methodSelector(authenticator, username:string, storedSignature:string, sentSignature:string){
         switch (authenticator.authentication_method.title) {
             // case 'lol' :/*for testing*/
             //     return this.passwordMethod.Compare(username, storedSignature, sentSignature)/*for testing*/
@@ -20,8 +20,8 @@ export class AuthenticationMethodSelectorService {
             case 'fingerprint_recognition':
                 return true
             case 'otp':
-                return true
-                return this.otpMethod.compare(storedSignature, sentSignature, authenticator.id).valid
+                const response = await this.otpMethod.compare(storedSignature, sentSignature, authenticator.id)
+                return response.valid
             case 'qr':
                 return true
         }

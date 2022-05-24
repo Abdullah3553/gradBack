@@ -13,7 +13,7 @@ export class AuthenticationMethodService {
 
   async create(request: CreateAuthenticationMethodDto) {
     // check for existence
-    const chekcer = await this.findOneByTitle(request);
+    const chekcer = await this.findOneByTitle(request.title);
       if (chekcer) {
       throw new NotAcceptableException('This method exists already');
     }
@@ -39,10 +39,10 @@ export class AuthenticationMethodService {
     return request;
   }
 
-  async findOneByTitle(title: CreateAuthenticationMethodDto) {
+  async findOneByTitle(title: string) {
     const request = await this.prisma.authentication_method.findUnique({
       where: {
-        title: title.title,
+        title: title,
       },
     });
     return request;

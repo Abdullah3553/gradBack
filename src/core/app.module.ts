@@ -6,9 +6,10 @@ import { RoleModule } from '../role/role.module';
 import { AuthenticatorModule } from '../authenticator/authenticator.module';
 import { UserModule } from '../user/user.module';
 import {PrivilegesModule} from "../privileges/privileges.module";
+import {EncryptionService} from "../encryption/encryption.service";
 
 @Module({
-  imports: [AuthenticationMethodModule, RoleModule, AuthenticatorModule, UserModule ,PrivilegesModule],
+  imports: [AuthenticationMethodModule, RoleModule, AuthenticatorModule, UserModule ,PrivilegesModule, EncryptionService],
   controllers: [AppController],
   providers: [AppService],
 })

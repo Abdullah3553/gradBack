@@ -29,12 +29,6 @@ export class MethodsController{
         return this.otpMethod.sendOtp(username)
     }
 
-    // @Post('/test')
-    // @UseInterceptors(FileInterceptor('file'))
-    // test(@Request() req){
-    //    return this.faceRecognitionMethod.saveimageRegister(req);
-    // }
-
     @Post('/face/register') //for registration
     @UseInterceptors(FileInterceptor('image', {
         storage: diskStorage({

@@ -9,9 +9,11 @@ import {FaceRecognitionMethod} from "./methods/face_recognition/faceRecognition.
 import {AuthenticatorModule} from "../authenticator/authenticator.module";
 import {MethodsController} from "./methods/methods.controller";
 import {FingerprintMethod} from "./methods/Fingerprint/fingerprint.method";
+import {UserModule} from "../user/user.module";
+import {EncryptionService} from "../encryption/encryption.service";
 
 @Module({
-  imports:[AuthenticatorModule],
+  imports:[AuthenticatorModule, UserModule, ],
   controllers: [MethodsController,AuthenticationMethodController, ],
   providers: [AuthenticationMethodService,
     AuthenticationMethodSelectorService,
@@ -19,8 +21,9 @@ import {FingerprintMethod} from "./methods/Fingerprint/fingerprint.method";
     OtpMethod,
       FaceRecognitionMethod,
     PrismaService,
-    FingerprintMethod
+    FingerprintMethod,
+    EncryptionService
   ],
-  exports:[AuthenticationMethodSelectorService]
+  exports:[AuthenticationMethodSelectorService, AuthenticationMethodService]
 })
 export class AuthenticationMethodModule {}

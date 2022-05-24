@@ -4,20 +4,23 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import {RegisterDto} from "./dto/register.dto";
 import {LoginDto} from "./dto/Login.dto";
+import {GuestService} from "./guest.service";
 
 @Controller('user')
 export class UserController {
-  constructor(private readonly userService: UserService) {}
+  constructor(private readonly userService: UserService,
+              private readonly guestService:GuestService
+              ) {}
 
   @Post('/register')
   register(@Body() req: RegisterDto)
   {
-    return this.userService.registerNewUser(req)
+    return this.guestService.registerNewUser(req)
   }
 
   @Post('/login')
   login(@Body() req:LoginDto){
-    return this.userService.login(req)
+    return this.guestService.login(req)
   }
 
   @Post('/new')
