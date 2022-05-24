@@ -92,7 +92,6 @@ export class MethodsController{
         })
     }))
     uploadFileLogin(@UploadedFiles() files: { images?: Express.Multer.File[] }) {
-        folderFlag = true
         const tmparr = files.images[0].path.split('\\')
         tmparr.pop()
         let path =''
