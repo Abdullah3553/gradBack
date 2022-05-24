@@ -71,7 +71,7 @@ export class OtpMethod implements BaseMethod{
         * */
         let user = await this.userService.findOneByUsername(username)
         const oldOtp = user.Authenticator.find(obj=>obj.authentication_method.title==='otp')
-        if(!!oldOtp){
+        if(!!oldOtp/*ammeeezzzing*/){
             // found old otp
             if(!this.isOtpExpired(oldOtp.createdAt)){
                 // this old otp did not expired
