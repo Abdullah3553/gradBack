@@ -19,7 +19,7 @@ import {EncryptionService} from "../encryption/encryption.service";
     AuthenticationMethodSelectorService,
     PasswordMethod,
     OtpMethod,
-      FaceRecognitionMethod,
+    FaceRecognitionMethod,
     PrismaService,
     FingerprintMethod,
     EncryptionService

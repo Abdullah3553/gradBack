@@ -4,16 +4,36 @@ import * as multer from "multer";
 import * as path from "path";
 import {AuthenticatorService} from "../../../authenticator/authenticator.service";
 import {Injectable} from "@nestjs/common";
+import {EncryptionService} from "../../../encryption/encryption.service";
 
 @Injectable()
 export class FaceRecognitionMethod implements BaseMethod{
-    constructor(private authenticatorService : AuthenticatorService) {
+    constructor(private authenticatorService : AuthenticatorService,
+                private readonly encryptionService : EncryptionService) {
+
     }
-    compare(encryptedStoredSignature:string, sentSignature:string , filePath:string){
-        // @ TODO with Aseel Coding style
+
+
+    compare(encryptedStoredSignature:string, sentSignature:string , filePath?:string){
+       /*
+       * 1- retrieve known pic from db
+       * 1-2 decrypt RSA known path
+       *  2- get unknown path from register . user in user service
+       * 3- main.py execute then compare
+       * 3-1 if true -> response
+       * 3-2 if false -> response
+       * 4- remove unknown pics
+       *
+       * */
+
+
         return {
 
         }
+    }
+    executeFaceModule (knownPath:string , unknownPath: string){
+
+
     }
     // saveimageRegister(req)
     // {
