@@ -25,6 +25,11 @@ export class AuthenticationMethodController {
     return this.authenticationMethodService.findAll();
   }
 
+  @Get('/find/all/guest')
+  findAllGuest(){
+    return this.authenticationMethodService.findAllForGuest();
+  }
+
   @Get('/find/:id')
   findOne(@Param('id') id: string ) {
     return this.authenticationMethodService.findOne(Number(id));

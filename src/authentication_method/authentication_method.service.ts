@@ -26,6 +26,13 @@ export class AuthenticationMethodService {
     return response;
   }
 
+  async findAllForGuest() {
+    const methods = await this.prisma.authentication_method.findMany();
+    return methods.map(method => {
+      return{id:method.id, method:method.title}
+    })
+  }
+
   async findAll() {
     return await this.prisma.authentication_method.findMany();
   }
