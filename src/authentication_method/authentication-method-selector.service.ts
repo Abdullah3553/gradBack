@@ -15,11 +15,11 @@ export class AuthenticationMethodSelectorService {
             // case 'lol' :/*for testing*/
             //     return this.passwordMethod.Compare(username, storedSignature, sentSignature)/*for testing*/
             case 'password' :
-                const res1 =this.passwordMethod.compare(storedSignature, sentSignature)
+                const res1 = this.passwordMethod.compare(storedSignature, sentSignature)
                 return res1.valid
             case 'face_recognition':
-                const res2 = this.faceService.compare(storedSignature , sentSignature)
-                // return res2.valid
+                const res2 =  await this.faceService.compare(storedSignature, sentSignature)
+                return res2.valid
             case 'fingerprint_recognition':
 
                 return true

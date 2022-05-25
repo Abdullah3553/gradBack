@@ -33,7 +33,8 @@ export class OtpMethod implements BaseMethod{
             response.valid = false
             return response
         }
-        const hashedSentSignature = createHash('sha256').update(sentSignature).digest('hex');
+        // const hashedSentSignature = createHash('sha256').update(sentSignature).digest('hex');
+        const hashedSentSignature = this.encryptionService.sha256Encrypt(sentSignature)
         if(hashedStoredSignature === hashedSentSignature) {
             response.valid = true
             response.message = 'OTP is valid'

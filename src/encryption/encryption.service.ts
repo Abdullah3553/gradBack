@@ -56,9 +56,7 @@ export class EncryptionService {
             },
             Buffer.from(encryptedData, 'base64')
         )
-        return {
-            decryptedData:decryptedData.toString()
-        }
+        return decryptedData.toString()
     }
 
     sha256Encrypt(rowData:string){
