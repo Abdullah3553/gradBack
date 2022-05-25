@@ -5,12 +5,15 @@ import * as path from "path";
 import {AuthenticatorService} from "../../../authenticator/authenticator.service";
 import {BadRequestException, Injectable} from "@nestjs/common";
 import {PrismaService} from "../../../prisma/prisma.service";
+import {EncryptionService} from "../../../encryption/encryption.service";
 const SerialPort = require("serialport").SerialPort;
 const Readline = require('@serialport/parser-readline').ReadlineParser;
 let arduinoSerialPort
 @Injectable()
 export class FingerprintMethod implements BaseMethod{
-    constructor(private readonly prisma:PrismaService,) {
+    constructor(private readonly prisma:PrismaService,
+                private readonly encryptionService:EncryptionService
+                ) {
         try{
             const com = ''
             // const com = 'COM3'
@@ -28,39 +31,67 @@ export class FingerprintMethod implements BaseMethod{
      takeInput(){
         const response={
             valid:false,
+            message:'Unknown Error',
+
             data:''
         }
         return new Promise((resolve,reject)=>{
             if(arduinoSerialPort.isOpen){
                 const parser = arduinoSerialPort.pipe(new Readline({ delimiter: '\r' }));// Read the port data
                 arduinoSerialPort.write('o', ()=>{
-                    parser.on('data', (data)=>{
+                    parser.on('data', (data, err)=>{
+                        if(err) {
+                            response.valid = false
+                            response.message = err
+                            reject(response)
+                        }
                         response.data=data;
-                            response.valid=true
-                            resolve(response)
+                        response.valid=true
+                        response.message = 'Finger scanned successfully'
+                        resolve(response)
                     })
                 })
             }
         })
     }
-      async enrollFinger(id:number) {
+      async enrollFinger() {
         const response = {
             valid:false,
+            message:'Unknown Error',
             data:''
         }
+        const id = await this.getFingerprintId()
         return new Promise((resolve, reject)=>{
             if(arduinoSerialPort.isOpen){
-                const parser = arduinoSerialPort.pipe(new Readline({ delimiter: '\n' }));// Read the port data
+                const parser = arduinoSerialPort.pipe(new Readline({ delimiter: '\r' }));// Read the port data
                 arduinoSerialPort.write(`e${id}`, ()=>{
                     parser.on('data', (data, err)=>{
-                        if(err) resolve(response)
+                        if(err) {
+                            response.valid = false
+                            response.message = err
+                            reject(response)
+                        }
                         response.valid = true
                         response.data = data
+                        response.message = 'Finger enrolled successfully'
                         resolve(response)
                     })
                 })
 
             }
         })
+    }
+    async getFingerprintId(){
+        const fingers = await this.prisma.authenticator.findMany({
+            where:{
+                authentication_method:{
+                    title:'fingerprint_recognition'
+                }
+            },
+            orderBy:{
+                priority:'asc'
+            }
+        })
+        return this.encryptionService.rsaDecrypt(fingers[fingers.length].signature)
     }
 }
