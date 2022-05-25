@@ -37,7 +37,7 @@ export class AuthenticatorService {
       auth = await this.prisma.authenticator.create({
         data: {
           signature: this.encryptionService.sha256Encrypt(createAuthenticatorDto.signature),
-          priority: createAuthenticatorDto.priority,
+          priority: Number(createAuthenticatorDto.priority),
           user: {
             connect: {
               id: createAuthenticatorDto.userId,
