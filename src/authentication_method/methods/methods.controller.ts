@@ -100,71 +100,71 @@ export class MethodsController{
             path,
         }
     }
-    @Post('test1/')
-    test(@Body('name') name:string){
-
-        console.log(name.length)
-        const envKey = process.env.RSA_PRIVATE_KEY.split('\\n')
-        envKey.pop()
-        let key = '-----BEGIN RSA PRIVATE KEY-----\n'
-        envKey.forEach(obj => key+= (obj+'\n'))
-        key +='-----END RSA PRIVATE KEY-----\n'
-        const privateKey = crypto.createPrivateKey({
-            // key: fs.readFileSync(path.resolve(__dirname, "../../../RSA_Key/private.pem")),
-            key: key, // for a higher security
-            format:'pem',
-            type:'pkcs1'
-        });
-        const publicKey = crypto.createPublicKey({
-            key:privateKey.export({format:'pem', type:'pkcs1'}),
-            format:'pem',
-            type:'pkcs1'
-        })
-        const data = name
-        const encryptedData = crypto.publicEncrypt(
-            {
-                key: publicKey,
-                padding: crypto.constants.RSA_PKCS1_OAEP_PADDING,
-                oaepHash: "sha256",
-            },
-            // We convert the data string to a buffer using `Buffer.from`
-            Buffer.from(data)
-        )
-        return {
-            encryptedData:encryptedData.toString('base64'),
-            length:encryptedData.toString('base64').length
-        }
-    }
-
-    @Post('test2/')
-    test2(@Body('name') name:string){
-        const envKey = process.env.RSA_PRIVATE_KEY.split('\\n')
-        envKey.pop()
-        let key = '-----BEGIN RSA PRIVATE KEY-----\n'
-        envKey.forEach(obj => key+= (obj+'\n'))
-        key +='-----END RSA PRIVATE KEY-----\n'
-        const privateKey = crypto.createPrivateKey({
-            // key: fs.readFileSync(path.resolve(__dirname, "../../../RSA_Key/private.pem")),
-            key: key, // for a higher security
-            format:'pem',
-            type:'pkcs1'
-        });
-        const decryptedData = crypto.privateDecrypt(
-            {
-                key: privateKey,
-                // In order to decrypt the data, we need to specify the
-                // same hashing function and padding scheme that we used to
-                // encrypt the data in the previous step
-                padding: crypto.constants.RSA_PKCS1_OAEP_PADDING,
-                oaepHash: "sha256",
-            },
-            Buffer.from(name, 'base64')
-        )
-        return {
-            decryptedData:decryptedData.toString(),
-            length:decryptedData.toString().length
-        }
-    }
+    // @Post('test1/')
+    // test(@Body('name') name:string){
+    //
+    //     console.log(name.length)
+    //     const envKey = process.env.RSA_PRIVATE_KEY.split('\\n')
+    //     envKey.pop()
+    //     let key = '-----BEGIN RSA PRIVATE KEY-----\n'
+    //     envKey.forEach(obj => key+= (obj+'\n'))
+    //     key +='-----END RSA PRIVATE KEY-----\n'
+    //     const privateKey = crypto.createPrivateKey({
+    //         // key: fs.readFileSync(path.resolve(__dirname, "../../../RSA_Key/private.pem")),
+    //         key: key, // for a higher security
+    //         format:'pem',
+    //         type:'pkcs1'
+    //     });
+    //     const publicKey = crypto.createPublicKey({
+    //         key:privateKey.export({format:'pem', type:'pkcs1'}),
+    //         format:'pem',
+    //         type:'pkcs1'
+    //     })
+    //     const data = name
+    //     const encryptedData = crypto.publicEncrypt(
+    //         {
+    //             key: publicKey,
+    //             padding: crypto.constants.RSA_PKCS1_OAEP_PADDING,
+    //             oaepHash: "sha256",
+    //         },
+    //         // We convert the data string to a buffer using `Buffer.from`
+    //         Buffer.from(data)
+    //     )
+    //     return {
+    //         encryptedData:encryptedData.toString('base64'),
+    //         length:encryptedData.toString('base64').length
+    //     }
+    // }
+    //
+    // @Post('test2/')
+    // test2(@Body('name') name:string){
+    //     const envKey = process.env.RSA_PRIVATE_KEY.split('\\n')
+    //     envKey.pop()
+    //     let key = '-----BEGIN RSA PRIVATE KEY-----\n'
+    //     envKey.forEach(obj => key+= (obj+'\n'))
+    //     key +='-----END RSA PRIVATE KEY-----\n'
+    //     const privateKey = crypto.createPrivateKey({
+    //         // key: fs.readFileSync(path.resolve(__dirname, "../../../RSA_Key/private.pem")),
+    //         key: key, // for a higher security
+    //         format:'pem',
+    //         type:'pkcs1'
+    //     });
+    //     const decryptedData = crypto.privateDecrypt(
+    //         {
+    //             key: privateKey,
+    //             // In order to decrypt the data, we need to specify the
+    //             // same hashing function and padding scheme that we used to
+    //             // encrypt the data in the previous step
+    //             padding: crypto.constants.RSA_PKCS1_OAEP_PADDING,
+    //             oaepHash: "sha256",
+    //         },
+    //         Buffer.from(name, 'base64')
+    //     )
+    //     return {
+    //         decryptedData:decryptedData.toString(),
+    //         length:decryptedData.toString().length
+    //     }
+    // }
 
     // @Get('tst/:id')
     // async tst(@Param('id')id:string){
