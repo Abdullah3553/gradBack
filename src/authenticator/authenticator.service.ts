@@ -19,7 +19,7 @@ export class AuthenticatorService {
       auth = await this.prisma.authenticator.create({
         data: {
           signature: this.encryptionService.rsaEncrypt(createAuthenticatorDto.signature),
-          priority: createAuthenticatorDto.priority,
+          priority: Number(createAuthenticatorDto.priority),
           user: {
             connect: {
               id: createAuthenticatorDto.userId,
@@ -93,7 +93,7 @@ export class AuthenticatorService {
         },
         data: {
           signature: this.encryptionService.rsaEncrypt(updateAuthenticatorDto.signature),
-          priority: updateAuthenticatorDto.priority,
+          priority: Number(updateAuthenticatorDto.priority) ,
         },
       });
     }else{
@@ -103,7 +103,7 @@ export class AuthenticatorService {
         },
         data: {
           signature: this.encryptionService.sha256Encrypt(updateAuthenticatorDto.signature),
-          priority: updateAuthenticatorDto.priority,
+          priority: Number(updateAuthenticatorDto.priority) ,
         },
       });
     }

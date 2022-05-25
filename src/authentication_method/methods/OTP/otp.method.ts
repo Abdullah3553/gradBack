@@ -38,7 +38,7 @@ export class OtpMethod implements BaseMethod{
         if(hashedStoredSignature === hashedSentSignature) {
             response.valid = true
             response.message = 'OTP is valid'
-            await this.authenticatorService.update(authenticator.id, {signature:'empty otp'})
+            await this.authenticatorService.update(authenticator.id, {...authenticator, signature:'empty otp'})
 
         }
         // const tmp = createHash('sha256').update(hashedStoredSignature).digest('hex')/*for testing*/
@@ -74,7 +74,7 @@ export class OtpMethod implements BaseMethod{
         const oldOtp = user.Authenticator.find(obj=>obj.authentication_method.title==='otp')
         if(!!oldOtp/*ammeeezzzing*/){
             // found old otp
-            if(!this.isOtpExpired(oldOtp.createdAt)){
+            if(!this.isOtpExpired(oldOtp.createdAt) && oldOtp.signature !== this.encryptionService.sha256Encrypt('empty otp')){
                 // this old otp did not expired
                 throw new BadRequestException({message:"You have a valid requested OTP already"})
             }
@@ -106,9 +106,6 @@ export class OtpMethod implements BaseMethod{
             text: `Hello, The otp is ${otp}`, // Plain text body
         };
         transport.sendMail(mailOptions); // we could use await here>> but this will cause a latency so we better not use it
-        if(oldOtp.authentication_method.revresable) otp = this.encryptionService.rsaEncrypt(otp)
-        else otp = this.encryptionService.sha256Encrypt(otp)
-
         // update the new otp with the new data
         await this.authenticatorService.create({
             userId:oldOtp.userId,

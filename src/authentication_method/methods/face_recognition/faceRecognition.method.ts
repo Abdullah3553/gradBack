@@ -30,7 +30,8 @@ export class FaceRecognitionMethod implements BaseMethod{
         const response = {valid:false, message:'No matching faces'}
         const decryptedSignature = this.encryptionService.rsaDecrypt(encryptedStoredSignature)
         let stdout =  await this.executeFaceModule(decryptedSignature,sentSignature);
-        if(stdout === 'True' )
+       const moduleRes = stdout.toString().split('\r\n')[0]
+       if(moduleRes === 'found' )
         {
             response.valid=true;
             response.message = 'matching successful'
@@ -41,7 +42,7 @@ export class FaceRecognitionMethod implements BaseMethod{
         return response
     }
     executeFaceModule (knownPath:string , unknownPath: string){
-    let command = `python main.py ${knownPath} ${unknownPath}`
+    let command = `python src/authentication_method/methods/face_recognition/main.py ${knownPath} ${unknownPath}`
 
             return new Promise(function (resolve, reject) {
                 exec(command, (err, stdout, stderr) => {

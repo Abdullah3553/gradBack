@@ -22,7 +22,8 @@ export class FingerprintMethod implements BaseMethod{
             console.log(err)
         }
     }
-    compare(encryptedStoredSignature:string, sentSignature:string , filePath:string){
+    compare(encryptedStoredSignature:string, sentSignature:string , filePath?:string){
+
         return {
 
         }
@@ -60,7 +61,7 @@ export class FingerprintMethod implements BaseMethod{
             message:'Unknown Error',
             data:''
         }
-        const id = await this.getFingerprintId()
+        const id = await this.getFingerprintId() //TODo +1
         return new Promise((resolve, reject)=>{
             if(arduinoSerialPort.isOpen){
                 const parser = arduinoSerialPort.pipe(new Readline({ delimiter: '\r' }));// Read the port data

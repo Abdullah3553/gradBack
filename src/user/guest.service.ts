@@ -34,16 +34,16 @@ export class GuestService{
             if(arr[i].authentication_methodId === userChecker.Authenticator[i].authentication_methodId){
                 // the [i] method is in the right sequence
                 // so we must check the signature data
-                const isAuthenticated = this.authenticationMethodSelector.methodSelector(
+                const isAuthenticated = await this.authenticationMethodSelector.methodSelector(
                     userChecker.Authenticator[i],
                     userChecker.username,
                     userChecker.Authenticator[i].signature,
                     userData.authenticators[i].signature
                 )
-                if(!isAuthenticated){
+                if(!isAuthenticated.valid){
                     // the authenticator sent by the user doesn't match the stored data
                     isUserValid = 0;
-                    throw new BadRequestException({message:"Wrong credentials"})
+                    throw new BadRequestException({message:`Wrong credentials : ${isAuthenticated.message}`})
                 }
                 // line after this comment means that the user authenticators are valid
                 isUserValid = 1;

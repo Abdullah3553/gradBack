@@ -10,24 +10,20 @@ export class AuthenticationMethodSelectorService {
         private readonly otpMethod:OtpMethod,
         private readonly faceService:FaceRecognitionMethod,
     ) {}
-    async methodSelector(authenticator, username:string, storedSignature:string, sentSignature:string){
+    async methodSelector(authenticator, username:string, storedSignature:string, sentSignature:string):Promise<{ valid: boolean, message: string }>{
         switch (authenticator.authentication_method.title) {
             // case 'lol' :/*for testing*/
             //     return this.passwordMethod.Compare(username, storedSignature, sentSignature)/*for testing*/
             case 'password' :
-                const res1 = this.passwordMethod.compare(storedSignature, sentSignature)
-                return res1.valid
+                return this.passwordMethod.compare(storedSignature, sentSignature)
             case 'face_recognition':
-                const res2 =  await this.faceService.compare(storedSignature, sentSignature)
-                return res2.valid
+                  return await this.faceService.compare(storedSignature, sentSignature)
             case 'fingerprint_recognition':
-
-                return true
+                return {valid:true, message:'empty'}
             case 'otp':
-                const response = await this.otpMethod.compare(storedSignature, sentSignature, authenticator.id)
-                return response.valid
+                return  await this.otpMethod.compare(storedSignature, sentSignature, authenticator)
             case 'qr':
-                return true
+                return {valid:true, message:'empty'}
         }
     }
 }

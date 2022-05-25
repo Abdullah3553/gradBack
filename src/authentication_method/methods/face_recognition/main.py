@@ -48,7 +48,9 @@ def main(args):
             face_distances = face_recognition.face_distance(known_face_encodings, face_encoding)
             best_match_index = np.argmin(face_distances)
             if matches[best_match_index]:
+                print('found')
                 return True
+    print('notFound')
     return False
 
 
