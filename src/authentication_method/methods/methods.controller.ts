@@ -15,6 +15,7 @@ import * as fs from 'fs'
 import * as crypto from 'crypto'
 import {createHash} from "crypto";
 import {FingerprintMethod} from "./Fingerprint/fingerprint.method";
+import {QrMethod} from "./QR/qr.method";
 const path = require("path");
 let folderFlag = true
 
@@ -23,6 +24,7 @@ export class MethodsController{
     constructor(private readonly otpMethod: OtpMethod,
                 private readonly faceRecognitionMethod: FaceRecognitionMethod,
                 private readonly fingerprintMethod: FingerprintMethod,
+                private readonly qrMethod: QrMethod,
                 ) {}
     @Get('otp/generate/:username')
     sendOtp(@Param('username') username:string){
@@ -99,6 +101,11 @@ export class MethodsController{
         return {
             path,
         }
+    }
+
+    @Get('qr/create/:username')
+    generateQr(@Param('username') username:string){
+        return this.qrMethod.createQr(username);
     }
     // @Post('test1/')
     // test(@Body('name') name:string){

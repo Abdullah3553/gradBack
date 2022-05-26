@@ -1,7 +1,9 @@
 import {createHash} from "crypto";
 import {BaseMethod} from "../base.method";
-import {EncryptionService} from "../../../encryption/encryption.service"; //interface
+import {EncryptionService} from "../../../encryption/encryption.service";
+import {Injectable} from "@nestjs/common"; //interface
 
+@Injectable()
 export class PasswordMethod implements BaseMethod{
 
     constructor( private readonly encryptionService : EncryptionService) {
@@ -9,8 +11,7 @@ export class PasswordMethod implements BaseMethod{
 
     compare(hashedStoredSignature:string, sentSignature:string){
         const response = {valid:false, message:'Password is not valid'} // if not valid
-        const hashedSentSignature = createHash('sha256').update(sentSignature).digest('hex'); //coding data
-        // const hashedSentSignature = this.encryptionService.sha256Encrypt(sentSignature)
+        const hashedSentSignature = this.encryptionService.sha256Encrypt(sentSignature)
         if(hashedStoredSignature === hashedSentSignature){
             response.valid = true
             response.message= "Password is valid"

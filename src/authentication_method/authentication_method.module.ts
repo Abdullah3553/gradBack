@@ -11,18 +11,20 @@ import {MethodsController} from "./methods/methods.controller";
 import {FingerprintMethod} from "./methods/Fingerprint/fingerprint.method";
 import {UserModule} from "../user/user.module";
 import {EncryptionService} from "../encryption/encryption.service";
+import {QrMethod} from "./methods/QR/qr.method";
 
 @Module({
   imports:[AuthenticatorModule, UserModule, ],
   controllers: [MethodsController,AuthenticationMethodController, ],
   providers: [AuthenticationMethodService,
     AuthenticationMethodSelectorService,
+      EncryptionService,
     PasswordMethod,
     OtpMethod,
     FaceRecognitionMethod,
     PrismaService,
     FingerprintMethod,
-    EncryptionService
+    QrMethod
   ],
   exports:[AuthenticationMethodSelectorService, AuthenticationMethodService]
 })

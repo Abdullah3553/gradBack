@@ -2,6 +2,7 @@ import {Injectable} from "@nestjs/common";
 import {PasswordMethod} from "./methods/password/password.method";
 import {OtpMethod} from "./methods/OTP/otp.method";
 import {FaceRecognitionMethod} from "./methods/face_recognition/faceRecognition.method";
+import {QrMethod} from "./methods/QR/qr.method";
 
 @Injectable()
 export class AuthenticationMethodSelectorService {
@@ -9,6 +10,7 @@ export class AuthenticationMethodSelectorService {
         private readonly passwordMethod:PasswordMethod,
         private readonly otpMethod:OtpMethod,
         private readonly faceService:FaceRecognitionMethod,
+        private readonly qrMethod:QrMethod
     ) {}
     async methodSelector(authenticator, username:string, storedSignature:string, sentSignature:string):Promise<{ valid: boolean, message: string }>{
         switch (authenticator.authentication_method.title) {
@@ -23,7 +25,8 @@ export class AuthenticationMethodSelectorService {
             case 'otp':
                 return  await this.otpMethod.compare(storedSignature, sentSignature, authenticator)
             case 'qr':
-                return {valid:true, message:'empty'}
+                return this.qrMethod.compare(storedSignature, sentSignature)
+
         }
     }
 }
