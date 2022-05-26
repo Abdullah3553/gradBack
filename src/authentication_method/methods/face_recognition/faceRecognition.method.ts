@@ -43,7 +43,6 @@ export class FaceRecognitionMethod implements BaseMethod{
     }
     executeFaceModule (knownPath:string , unknownPath: string){
     let command = `python src/authentication_method/methods/face_recognition/main.py ${knownPath} ${unknownPath}`
-
             return new Promise(function (resolve, reject) {
                 exec(command, (err, stdout, stderr) => {
                     if (err) {

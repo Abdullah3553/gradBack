@@ -6,8 +6,8 @@ import {Injectable} from "@nestjs/common"; //interface
 @Injectable()
 export class PasswordMethod implements BaseMethod{
 
-    constructor( private readonly encryptionService : EncryptionService) {
-    }
+    constructor( private readonly encryptionService : EncryptionService)
+    {}
 
     compare(hashedStoredSignature:string, sentSignature:string){
         const response = {valid:false, message:'Password is not valid'} // if not valid

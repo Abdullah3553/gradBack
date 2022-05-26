@@ -25,16 +25,14 @@ export class QrMethod implements BaseMethod{
     }
 
      createQr(username:string)
-{
-    let value,result='';
-    for(let i=0;i<5;i++)
     {
+    let value,result='';
+    for(let i=0;i<5;i++) {
        value = Math.floor(Math.random() * 10);
         result += value.toString();
     }
     result=result+username;
-    for(let i=0;i<5;i++)
-    {
+    for(let i=0;i<5;i++) {
         value = Math.floor(Math.random() * 10);
         result += value.toString();
     }

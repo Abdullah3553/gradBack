@@ -9,6 +9,7 @@ import {EncryptionService} from "../../../encryption/encryption.service";
 const SerialPort = require("serialport").SerialPort;
 const Readline = require('@serialport/parser-readline').ReadlineParser;
 let arduinoSerialPort
+
 @Injectable()
 export class FingerprintMethod implements BaseMethod{
     constructor(private readonly prisma:PrismaService,
@@ -22,18 +23,20 @@ export class FingerprintMethod implements BaseMethod{
             console.log(err)
         }
     }
-    compare(encryptedStoredSignature:string, sentSignature:string , filePath?:string){
-
-        return {
-
+    compare(encryptedStoredSignature:string, sentSignature:string ){
+        const response = {valid:false, message:'Finger is not matched'} // if not valid
+        const hashedSentSignature = this.encryptionService.sha256Encrypt(sentSignature)
+        if(hashedSentSignature === encryptedStoredSignature){
+            response.valid = true
+            response.message = 'Finger is matched '
         }
+        return response
     }
 
      takeInput(){
         const response={
             valid:false,
             message:'Unknown Error',
-
             data:''
         }
         return new Promise((resolve,reject)=>{
@@ -61,7 +64,7 @@ export class FingerprintMethod implements BaseMethod{
             message:'Unknown Error',
             data:''
         }
-        const id = await this.getFingerprintId() //TODo +1
+        let id = await this.getFingerprintId()+1 //TODo +1
         return new Promise((resolve, reject)=>{
             if(arduinoSerialPort.isOpen){
                 const parser = arduinoSerialPort.pipe(new Readline({ delimiter: '\r' }));// Read the port data

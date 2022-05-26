@@ -3,6 +3,7 @@ import {PasswordMethod} from "./methods/password/password.method";
 import {OtpMethod} from "./methods/OTP/otp.method";
 import {FaceRecognitionMethod} from "./methods/face_recognition/faceRecognition.method";
 import {QrMethod} from "./methods/QR/qr.method";
+import {FingerprintMethod} from "./methods/Fingerprint/fingerprint.method";
 
 @Injectable()
 export class AuthenticationMethodSelectorService {
@@ -10,7 +11,8 @@ export class AuthenticationMethodSelectorService {
         private readonly passwordMethod:PasswordMethod,
         private readonly otpMethod:OtpMethod,
         private readonly faceService:FaceRecognitionMethod,
-        private readonly qrMethod:QrMethod
+        private readonly qrMethod:QrMethod,
+        private readonly fingerprintMethod : FingerprintMethod
     ) {}
     async methodSelector(authenticator, username:string, storedSignature:string, sentSignature:string):Promise<{ valid: boolean, message: string }>{
         switch (authenticator.authentication_method.title) {
@@ -21,7 +23,7 @@ export class AuthenticationMethodSelectorService {
             case 'face_recognition':
                   return await this.faceService.compare(storedSignature, sentSignature)
             case 'fingerprint_recognition':
-                return {valid:true, message:'empty'}
+                return this.fingerprintMethod.compare(storedSignature, sentSignature)
             case 'otp':
                 return  await this.otpMethod.compare(storedSignature, sentSignature, authenticator)
             case 'qr':
