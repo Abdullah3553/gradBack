@@ -103,7 +103,7 @@ export class MethodsController{
         }
     }
 
-    @Get('qr/create/:username')
+    @Get('qr/createId/:username')
     generateQr(@Param('username') username:string){
         return this.qrMethod.createQr(username);
     }

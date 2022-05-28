@@ -37,10 +37,7 @@ export class QrMethod implements BaseMethod{
         result += value.toString();
     }
     result = this.encryptionService.rsaEncrypt(result)
-    const qrcode = new Encoder();
-    qrcode.write(new QRByte(result));
-    qrcode.make();
-    return qrcode.toDataURL()
+    return result
 }
 
 
