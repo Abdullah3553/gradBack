@@ -16,8 +16,8 @@ export class FingerprintMethod implements BaseMethod{
                 private readonly encryptionService:EncryptionService
                 ) {
         try{
-            const com = ''
-            // const com = 'COM3'
+            // const com = ''
+            const com = 'COM3'
             arduinoSerialPort = new SerialPort({path:com, baudRate: 9600});
         }catch (err){
             console.log(err)
@@ -26,6 +26,12 @@ export class FingerprintMethod implements BaseMethod{
     compare(encryptedStoredSignature:string, sentSignature:string ){
         const response = {valid:false, message:'Finger is not matched'} // if not valid
         const hashedSentSignature = this.encryptionService.sha256Encrypt(sentSignature)
+        // debugging .............
+        // console.log("db -> ", encryptedStoredSignature)
+        // console.log("db no -> ", this.encryptionService.rsaDecrypt(encryptedStoredSignature) )
+        // console.log("user -> ", hashedSentSignature)
+        // console.log("user no -> ", this.encryptionService.rsaDecrypt(hashedSentSignature) )
+
         if(hashedSentSignature === encryptedStoredSignature){
             response.valid = true
             response.message = 'Finger is matched '
@@ -64,7 +70,7 @@ export class FingerprintMethod implements BaseMethod{
             message:'Unknown Error',
             data:''
         }
-        let id = await this.getFingerprintId()+1 //TODo +1
+        let id = await this.getFingerprintId()
         return new Promise((resolve, reject)=>{
             if(arduinoSerialPort.isOpen){
                 const parser = arduinoSerialPort.pipe(new Readline({ delimiter: '\r' }));// Read the port data
@@ -96,6 +102,10 @@ export class FingerprintMethod implements BaseMethod{
                 priority:'asc'
             }
         })
-        return this.encryptionService.rsaDecrypt(fingers[fingers.length].signature)
+        let id = 0
+        if(!fingers){
+            id = Number(this.encryptionService.rsaDecrypt(fingers[fingers.length].signature))
+        }
+        return id+1
     }
 }
