@@ -17,8 +17,27 @@ export class FingerprintMethod implements BaseMethod{
                 ) {
         try{
             // const com = ''
-            const com = 'COM3'
-            arduinoSerialPort = new SerialPort({path:com, baudRate: 9600});
+            // const com = 'COM3'
+            let path = ''
+            SerialPort.list().then(ports => {
+                let done = false
+                let count = 0
+                let allports = ports.length
+                ports.forEach(function(port) {
+                    count = count+1
+                    let pm  = port.manufacturer
+                    if (typeof pm !== 'undefined' && pm.includes('arduino')) {
+                        path = port.path
+                        arduinoSerialPort = new SerialPort({path:path, baudRate: 9600});
+                        done = true
+                    }
+
+                    if(count === allports && done === false){
+                        console.log(`can't find any arduino`)
+                    }
+                })
+            })
+
         }catch (err){
             console.log(err)
         }
