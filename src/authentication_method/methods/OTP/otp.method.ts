@@ -89,30 +89,39 @@ export class OtpMethod implements BaseMethod{
             lowerCaseAlphabets:false,
         }
         let otp = generate(6, otpOptions);
-        let transport = nodemailer.createTransport({
-            host: "smtp.gmail.com",
-            port: 465,
-            secure: true,
-            auth: {
-                user: process.env.OTP_EMAIL,
-                pass: process.env.OTP_EMAIL_PASSWORD,
-            }
-        });
+        let transport
+        try{
+            transport = nodemailer.createTransport({
+                host: "smtp-mail.outlook.com",
+                port: 587,
+                secureConnection: false,
+                auth: {
+                    user: process.env.OTP_EMAIL,
+                    pass: process.env.OTP_EMAIL_PASSWORD,
+                },
+                tls: {
+                    ciphers:'SSLv3'
+                }
+            });
+            const mailOptions = {
+                from: process.env.OTP_EMAIL, // Sender address
+                to: user.email, // List of recipients
+                subject: 'Authentication System OTP', // Subject line
+                text: `Hello, The otp is ${otp}`, // Plain text body
+            };
+            transport.sendMail(mailOptions); // we could use await here>> but this will cause a latency so we better not use it
+            // update the new otp with the new data
+            await this.authenticatorService.create({
+                userId:oldOtp.userId,
+                signature:otp,
+                authentication_methodId:oldOtp.authentication_methodId,
+                priority:oldOtp.priority
+            })
+            return true
+        }catch (err){
+            console.log(err)
+            throw new BadRequestException({message:'Error in sending'})
+        }
 
-        const mailOptions = {
-            from: process.env.OTP_EMAIL, // Sender address
-            to: user.email, // List of recipients
-            subject: 'Authentication System OTP', // Subject line
-            text: `Hello, The otp is ${otp}`, // Plain text body
-        };
-        transport.sendMail(mailOptions); // we could use await here>> but this will cause a latency so we better not use it
-        // update the new otp with the new data
-        await this.authenticatorService.create({
-            userId:oldOtp.userId,
-            signature:otp,
-            authentication_methodId:oldOtp.authentication_methodId,
-            priority:oldOtp.priority
-        })
-        return true
     }
 }
