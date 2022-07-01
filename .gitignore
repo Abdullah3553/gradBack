@@ -39,3 +39,4 @@ lerna-debug.log*
 .env
 # the following ignore should not be used in th eproduction run
 /src/authentication_method/methods/face_recognition/storage/
+/src/authentication_method/methods/Fingerprint/fingerprint/

@@ -33,7 +33,13 @@ export class FingerprintMethod implements BaseMethod{
                     }
 
                     if(count === allports && done === false){
-                        console.log(`can't find any arduino`)
+                        try{
+                            arduinoSerialPort = new SerialPort({path:'', baudRate: 9600});
+                        }catch (e)
+                        {
+                            console.log(`can't find any arduino`)
+                            console.log(e)
+                        }
                     }
                 })
             })
@@ -47,7 +53,7 @@ export class FingerprintMethod implements BaseMethod{
         const hashedSentSignature = this.encryptionService.sha256Encrypt(sentSignature)
         // debugging .............
         // console.log("db -> ", encryptedStoredSignature)
-        // console.log("db no -> ", this.encryptionService.rsaDecrypt(encryptedStoredSignature) )
+        // console.log("db no -> ", this.encryptionServ ice.rsaDecrypt(encryptedStoredSignature) )
         // console.log("user -> ", hashedSentSignature)
         // console.log("user no -> ", this.encryptionService.rsaDecrypt(hashedSentSignature) )
 
