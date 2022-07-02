@@ -53,7 +53,6 @@ export class FaceRecognitionMethod implements BaseMethod{
                 });
 
         })
-
     }
 
     async test(path:string, id:number){

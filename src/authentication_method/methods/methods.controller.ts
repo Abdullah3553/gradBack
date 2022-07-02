@@ -189,14 +189,14 @@ export class MethodsController{
     //         id: id
     //     }
     // }
-    @Get('fingerprint/scan')
-    async scanFinger(){
-        const ard= await this.fingerprintMethod.takeInput()
+    @Get('fingerprint/scan/:username')
+    async scanFinger(@Param('username') username){
+        const ard= await this.fingerprintMethod.takeInput(username)
         return ard
     }
-    @Get('fingerprint/enroll')
-    async enrollFinger(){
-        const ard= await this.fingerprintMethod.enrollFinger()
+    @Get('fingerprint/enroll/:username')
+    async enrollFinger(@Param('username') username){
+        const ard= await this.fingerprintMethod.enrollFinger(username)
         return ard
     }
 

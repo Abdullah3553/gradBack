@@ -1,5 +1,4 @@
 
-import re
 import serial
 import serial.tools.list_ports
 import random
@@ -10,9 +9,11 @@ import numpy
 from enhance import image_enhance
 from skimage.morphology import skeletonize, thin
 
+#print(os.system("pwd"))
 baudRate =  57600
 serialPort= 0
 fileName= 0
+FINGERPRINTS_FOLDER = 'src/authentication_method/methods/Fingerprint/fingerprint/'
 WIDTH = 256
 HEIGHT = 288
 READ_LEN = int(WIDTH * HEIGHT / 2)
@@ -66,7 +67,7 @@ def initFileName(id):
 
 
 def getPrint(fileName):
-    out = open("fingerprint/" +fileName+'.bmp', 'wb')
+    out = open(FINGERPRINTS_FOLDER +fileName+'.bmp', 'wb')
     # assemble and write the BMP header to the file
     out.write(assembleHeader(WIDTH, HEIGHT, DEPTH, True))
     for i in range(256):
@@ -107,6 +108,7 @@ def getPrint(fileName):
             out.close()
             ser.close()
             return False
+    return True
 
 def removedot(invertThin):
     temp0 = numpy.array(invertThin[:])
@@ -206,24 +208,29 @@ def main():
         tempimg= "temp"+fileName
         getPrint(fileName)
         getPrint(tempimg)
-        result= matcher("fingerprint/"+tempimg+".bmp", "fingerprint/"+fileName+".bmp")
+        result= matcher(FINGERPRINTS_FOLDER+tempimg+".bmp", FINGERPRINTS_FOLDER+fileName+".bmp")
+        os.remove(FINGERPRINTS_FOLDER+tempimg+".bmp")
         if result is True:
-            os.remove("fingerprint/"+tempimg+".bmp")
-            print("TRUE," + fileName)
+            print("TRUE," + fileName+",")
         elif result is False:
-            os.remove("fingerprint/"+tempimg+".bmp")
-            os.remove("fingerprint/"+fileName+".bmp")
-            print("FALSE,")
-    else:
-        str= sys.argv[2].removeprefix("fingerprint/").removesuffix(".bmp")
-        tempimg= "temp"+ str
-        getPrint(tempimg)
-        result= matcher("fingerprint/"+tempimg+".bmp", "fingerprint/"+str+".bmp")
+            # in this case the error is fingerprint image is not clear
+            os.remove(FINGERPRINTS_FOLDER+fileName+".bmp")
+            print("FALSE,place your finger correctly")
+    elif sys.argv[1] == "loginInput":
+        initFileName(sys.argv[2])
+        tempimg= "temp"+fileName
+        if getPrint(tempimg) is True:
+            print("TRUE,"+tempimg+",")
+        else:
+            print("FALSE,")     
+    elif sys.argv[1] == "loginCheck":
+        # sys.argv[2] -> id
+        # sys.argv[3] -> tmpDiffId
+        result= matcher(FINGERPRINTS_FOLDER+sys.argv[2]+".bmp", FINGERPRINTS_FOLDER+sys.argv[3]+".bmp")
+        os.remove(FINGERPRINTS_FOLDER+sys.argv[3]+".bmp")
         if result is True:
-            os.remove("fingerprint/"+tempimg+".bmp")
             print("TRUE,")
         elif result is False:
-            os.remove("fingerprint/"+tempimg+".bmp")
             print("FALSE,")
 
 if __name__ == "__main__":

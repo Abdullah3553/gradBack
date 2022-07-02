@@ -21,3 +21,4 @@ export class PasswordMethod implements BaseMethod{
         return response
     }
 }
+
