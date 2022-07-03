@@ -92,7 +92,6 @@ export class TokenService {
 
 // Usually I keep the token between 5 minutes - 15 minutes
   generateAccessToken(userId) {
-    // validation if refresh token is not revoked @TODO
     return jwt.sign({ userId: userId }, process.env.JWT_ACCESS_SECRET, {
       expiresIn: '5m',
     });

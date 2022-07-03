@@ -47,12 +47,12 @@ model Authenticator {
 
 model User {
   id            Int             @id @default(autoincrement())
-  username      String          @unique @db.VarChar(345)    // @TODO Encryption
+  username      String          @unique @db.VarChar(345)
   birth_date    DateTime
-  email         String          @unique @db.VarChar(345)    // @TODO Encryption
-  country       String?         @db.VarChar(345)            // @TODO Encryption
-  street        String?         @db.VarChar(345)            // @TODO Encryption
-  city          String?         @db.VarChar(345)            // @TODO Encryption
+  email         String          @unique @db.VarChar(345)
+  country       String?         @db.VarChar(345)
+  street        String?         @db.VarChar(345)
+  city          String?         @db.VarChar(345)
   Authenticator Authenticator[]
   role          Role?          @relation(references: [id], fields: [role_id])
   role_id       Int ?
