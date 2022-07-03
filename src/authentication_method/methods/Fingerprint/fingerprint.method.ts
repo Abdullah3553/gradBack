@@ -16,9 +16,10 @@ export class FingerprintMethod implements BaseMethod{
     constructor(private readonly prisma:PrismaService,
                 private readonly encryptionService:EncryptionService
                 ) {}
-    async compare(encryptedStoredSignature:string, sentSignature:string ){
+    async compare(encryptedStoredSignature:string, encryptedSentSignature:string ){
         const response = {valid:false, message:'Finger is not matched'} // if not valid
         const storedSignature = this.encryptionService.rsaDecrypt(encryptedStoredSignature)
+        const sentSignature = this.encryptionService.rsaDecrypt(encryptedSentSignature)
         // debugging .............
         // console.log("db -> ", encryptedStoredSignature)
         // console.log("db no -> ", this.encryptionServ ice.rsaDecrypt(encryptedStoredSignature) )
@@ -105,7 +106,7 @@ export class FingerprintMethod implements BaseMethod{
         if(exeResArr[0] == 'TRUE'){
             response.valid = true
             response.message = 'Fingerprint Read'
-            response.data = exeResArr[1]
+            response.data = this.encryptionService.rsaEncrypt(exeResArr[1])
         }
         return response
     }

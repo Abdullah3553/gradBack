@@ -39,7 +39,6 @@ export class OtpMethod implements BaseMethod{
             response.valid = true
             response.message = 'OTP is valid'
             await this.authenticatorService.update(authenticator.id, {...authenticator, signature:'empty otp'})
-
         }
         // const tmp = createHash('sha256').update(hashedStoredSignature).digest('hex')/*for testing*/
         // if(hashedSentSignature === tmp)return true/*for testing*/

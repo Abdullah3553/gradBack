@@ -63,7 +63,6 @@ def initFileName(id):
    rand2= random.randint(100, 999)
    global fileName
    fileName = str(rand1) + str(id) + str(rand2)
-   
 
 
 def getPrint(fileName):
@@ -222,7 +221,7 @@ def main():
         if getPrint(tempimg) is True:
             print("TRUE,"+tempimg+",")
         else:
-            print("FALSE,")     
+            print("FALSE,")
     elif sys.argv[1] == "loginCheck":
         # sys.argv[2] -> id
         # sys.argv[3] -> tmpDiffId
